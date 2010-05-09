@@ -75,6 +75,8 @@ void Device::Disconnect() {
 
 	if (device != NULL) {
 		cout << "[Device] Closing USB Connection." << endl;
+		libusb_release_interface(device, 0);
+		libusb_release_interface(device, 1);
 		libusb_close(device);
 	}
 }
@@ -84,7 +86,7 @@ void Device::Reset() {
 	libusb_reset_device(device);
 }
 
-bool Device::Send(char* command) {
+bool Device::Send(const char* command) {
 
 	int length = strlen(command);
 

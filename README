@@ -16,3 +16,8 @@ Why not?
 
 == Console / Batch Commands ==
 (coming soon)
+
+== Release Build ==
+-Wno-deprecated
+
+To hide string constant errors.

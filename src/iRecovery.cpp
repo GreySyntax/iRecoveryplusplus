@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 
 int main() {
 	cout << "iRecovery++ :: " << VERSION << endl;

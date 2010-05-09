@@ -32,7 +32,7 @@ public:
 	bool Exploit(char* file[]);//TODO
 	void Init();
 	void Reset();
-	bool Send(char* argv);
+	bool Send(const char* argv);
 	bool Upload(char* file[]);//TODO
 
 private:
