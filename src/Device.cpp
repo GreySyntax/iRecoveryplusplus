@@ -52,7 +52,6 @@ bool Device::Connect() {
 	}
 
 	int configuration = 0;
-
 	libusb_get_configuration(device, &configuration);
 
 	if (configuration != 1) {
@@ -66,8 +65,12 @@ bool Device::Connect() {
 
 	if (libusb_claim_interface(device, 0) < 0) {
 		cout << "[Device] Error claiming interface." << endl;
+		//If at first you don't succeed, try, try again.
+		//Then quit. There's no point in being a damn fool about it.
+		return false;
 	}
 
+	//It's not enough that I should succeed - others should fail.
 	return true;
 }
 

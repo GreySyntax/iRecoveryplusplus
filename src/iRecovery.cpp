@@ -13,10 +13,18 @@ using namespace std;
 
 #define VERSION "1.0.2"
 
+//Arguments
+//-a auto-boot
+//-c command
+//-u upload
+//-e execute
+//-s screen
+//-h help
+
 int main() {
-	cout << "iRecovery++ :: " << VERSION << endl;
-	cout << "by GreySyntax" << endl << endl;
-	cout << "Special thanks to posixninja" << endl << endl;
+	cout << "iRecovery++ :: " << VERSION << "\r\n";
+	cout << "by GreySyntax\r\n\r\n";
+	cout << "Special thanks to posixninja\r\n" << endl;
 
 	Device MobileDevice;
 
