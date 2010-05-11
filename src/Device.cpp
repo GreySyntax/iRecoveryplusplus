@@ -98,6 +98,9 @@ bool Device::Send(const char* command) {
 		return false;
 	}
 
-	libusb_control_transfer(device, 0x40, 0, 0, 0, (unsigned char*)command, (length + 1), 1000);
+	if(! libusb_control_transfer(device, 0x40, 0, 0, 0, (unsigned char*)command, (length + 1), 1000)) {
+		cout << "[Device] Failed to send command" << endl;
+		return false;
+	}
 	return true;
 }
