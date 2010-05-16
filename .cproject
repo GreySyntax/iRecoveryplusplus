@@ -20,9 +20,9 @@
 <toolChain id="cdt.managedbuild.toolchain.gnu.macosx.exe.debug.1545691106" name="MacOSX GCC" resourceTypeBasedDiscovery="true" superClass="cdt.managedbuild.toolchain.gnu.macosx.exe.debug">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.macosx.exe.debug.1163850097" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.macosx.exe.debug"/>
 <builder buildPath="${workspace_loc:/iRecovery/Debug}" id="cdt.managedbuild.target.gnu.builder.macosx.exe.debug.912449551" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.exe.debug"/>
-<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.105187030" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
-<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.1155112711" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
-<option id="macosx.cpp.link.option.libs.426159085" superClass="macosx.cpp.link.option.libs" valueType="libs">
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.105187030" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.1155112711" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
+<option id="macosx.cpp.link.option.libs.426159085" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="usb-1.0"/>
 <listOptionValue builtIn="false" value="readline"/>
 </option>
@@ -34,7 +34,7 @@
 <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug.1226586738" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1418358021" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1684977400" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1684977400" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.debug.1965362969" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.debug">
 <option id="gnu.cpp.compilermacosx.exe.debug.option.optimization.level.1882728713" name="Optimization Level" superClass="gnu.cpp.compilermacosx.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.820582335" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
@@ -394,8 +394,8 @@
 <toolChain id="cdt.managedbuild.toolchain.gnu.macosx.exe.release.1423360755" name="MacOSX GCC" superClass="cdt.managedbuild.toolchain.gnu.macosx.exe.release">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.macosx.exe.release.1397274025" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.macosx.exe.release"/>
 <builder buildPath="${workspace_loc:/iRecovery/Release}" id="cdt.managedbuild.target.gnu.builder.macosx.exe.release.2027097322" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.exe.release"/>
-<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release.895110409" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release"/>
-<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.1457332005" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release.895110409" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release"/>
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.1457332005" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
 <inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.243592271" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -404,7 +404,7 @@
 <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.exe.release.1803488509" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.exe.release">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.247136301" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
-<tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1882365104" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice" id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1882365104" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.release.652327060" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.release">
 <option id="gnu.cpp.compiler.macosx.exe.release.option.optimization.level.811397841" name="Optimization Level" superClass="gnu.cpp.compiler.macosx.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.macosx.exe.release.option.debugging.level.932692572" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>

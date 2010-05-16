@@ -26,14 +26,14 @@ class Device {
 public:
 	Device();
 	void AutoBoot();
-	bool Buffer();//TODO
+	bool Buffer(char* data, int length);//TODO
 	bool Connect();
 	void Disconnect();
-	bool Exploit(char* file[]);//TODO
+	bool Exploit(const char* file);//TODO
 	void Init();
 	void Reset();
 	bool Send(const char* argv);
-	bool Upload(char* file[]);//TODO
+	bool Upload(const char* file);//TODO
 
 private:
 	struct libusb_device_handle *device;

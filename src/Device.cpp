@@ -41,6 +41,11 @@ void Device::AutoBoot() {
 	exit(-1);
 }
 
+bool Device::Buffer(char* data, int length) {
+
+	//TODO
+}
+
 bool Device::Connect() {
 
 	if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, RECV_MODE)) == NULL) {
@@ -98,9 +103,100 @@ bool Device::Send(const char* command) {
 		return false;
 	}
 
-	if(! libusb_control_transfer(device, 0x40, 0, 0, 0, (unsigned char*)command, (length + 1), 1000)) {
+	if(! libusb_control_transfer(device, 0x40, 0, 0, 0, (unsigned char*)command, (length + 1), 500)) {
 		cout << "[Device] Failed to send command" << endl;
 		return false;
 	}
 	return true;
+}
+
+bool Device::Upload(const char* file) {
+
+	FILE* data = fopen(file, "rb");
+
+	if (data != NULL) {
+
+		fseek(data, 0, SEEK_END);
+		unsigned int length = ftell(data);
+		fseek(data, 0, SEEK_SET);
+
+		char* buffer = (char*)malloc(length);
+
+		if (buffer != NULL) {
+
+			fread(buffer, 1, length, data);
+			fclose(data);
+
+			int packets, last;
+
+			packets = length % 0x800;
+			last = length % 0x800;
+
+			if (length % 0x800) packets++;
+			if (! last) last = 0x800;
+
+			unsigned int sent;
+			char response[6];
+
+			for (int i = 0; i < packets; i++) {
+
+				int len = last;
+
+				if ((i + 1) < packets) len = 0x800;
+				sent += len;
+
+				if (libusb_control_transfer(device, 0x21, 1, i, 0, (unsigned char*)&buffer[i * 0x800], len, 1000)) {
+
+					if (libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) == 6) {
+
+						if (response[4] == 5) {
+
+							cout << "[IO] Sucessfully transfered " << (i + 1) << " of " << packets << endl;
+							continue;
+						}
+
+						cout << "[Device] Invalid execution status" << endl;
+						free(buffer);
+						return false;
+					}
+
+					cout << "[Device] Failed to retreive execution status" << endl;
+					free(buffer);
+					return false;
+				}
+
+				cout << "[IO] Failed to send packet " << (i + 1) << " of " << packets << endl;
+				free(buffer);
+				return false;
+			}
+
+			libusb_control_transfer(device, 0x21, 1, packets, 0, (unsigned char*)buffer, 0, 1000);
+			free(buffer);
+			cout << "[Device] Executing file" << endl;
+
+			unsigned char test[6];
+			for (int i = 6; i <= 8; i++) {
+
+				if (libusb_control_transfer(device, 0xA1, 3, 0, 0, test, 6, 1000) == 6) {
+					if (test[4] != i) {
+						cout << (char*)test << endl;
+						cout << "[Device] Invalid execution status.." << endl;
+						return false;
+					}
+					continue;
+				}
+				return false;
+			}
+
+			cout << "[Device] Successfully executed file" << endl;
+			return true;
+		}
+
+		cout << "[IO] Failed to allocate " << length << " bytes" << endl;
+		fclose(data);
+		return false;
+	}
+
+	cout << "[IO] Failed to open file " << file << endl;
+	return false;
 }

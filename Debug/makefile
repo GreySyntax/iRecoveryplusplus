@@ -44,7 +44,7 @@ all: iRecovery
 iRecovery: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++  -o "iRecovery" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++  -o "iRecovery" $(OBJS) $(USER_OBJS) $(LIBS) -framework CoreFoundation -framework IOKit -F/Library/Frameworks -framework CoreFoundation -F/System/Library/PrivateFrameworks -framework MobileDevice
 	@echo 'Finished building target: $@'
 	@echo ' '
 

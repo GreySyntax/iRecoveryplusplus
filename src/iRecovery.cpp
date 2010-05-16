@@ -34,7 +34,7 @@ int main() {
 	}
 
 	cout << "[Device] Connected." << endl;
-	MobileDevice.AutoBoot();
+	MobileDevice.Upload("usb.h");
 	MobileDevice.Disconnect();
 
 	return 0;
