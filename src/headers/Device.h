@@ -33,7 +33,7 @@ public:
 	void Init();
 	void Reset();
 	bool Send(const char* argv);
-	bool Upload(const char* file);//TODO
+	bool Upload(const char* file);
 
 private:
 	struct libusb_device_handle *device;

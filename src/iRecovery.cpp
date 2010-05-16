@@ -34,7 +34,7 @@ int main() {
 	}
 
 	cout << "[Device] Connected." << endl;
-	MobileDevice.Upload("usb.h");
+	MobileDevice.Upload("README");
 	MobileDevice.Disconnect();
 
 	return 0;

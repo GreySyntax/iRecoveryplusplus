@@ -174,12 +174,12 @@ bool Device::Upload(const char* file) {
 			free(buffer);
 			cout << "[Device] Executing file" << endl;
 
-			unsigned char test[6];
+			//unsigned char response[6];
 			for (int i = 6; i <= 8; i++) {
 
-				if (libusb_control_transfer(device, 0xA1, 3, 0, 0, test, 6, 1000) == 6) {
-					if (test[4] != i) {
-						cout << (char*)test << endl;
+				if (libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) == 6) {
+					if (response[4] != i) {
+
 						cout << "[Device] Invalid execution status.." << endl;
 						return false;
 					}
