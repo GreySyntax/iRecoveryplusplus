@@ -1,10 +1,20 @@
-//============================================================================
-// Name        : Device.h
-// Author      : GreySyntax
-// Version     : 1.0
-// Copyright   : GreySyntax 2010(C)
-// Description : A C++ implementation of "iRecovery 2.x"
-//============================================================================
+/***
+ * iRecovery++ libusb based usb interface for iBoot and iBSS
+ * Copyright © 2010  GreySyntax
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DEVICE_H_
 #define DEVICE_H_
@@ -25,14 +35,14 @@
 class Device {
 public:
 	Device();
-	void AutoBoot();
-	bool Buffer(char* data, int length);//TODO
+	bool AutoBoot();
 	bool Connect();
 	void Disconnect();
-	bool Exploit(const char* file);//TODO
-	void Init();
+	bool Exploit(const char* file);
+	bool IsConnected();
 	void Reset();
-	bool Send(const char* argv);
+	bool SendCommand(const char* argv);
+	bool SendBuffer(char* data, int index, int length);
 	bool Upload(const char* file);
 
 private:
