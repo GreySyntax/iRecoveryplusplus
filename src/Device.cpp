@@ -128,7 +128,7 @@ bool Device::Console() {
 void Device::Disconnect() {
 
 	if (device != NULL) {
-		cout << "[Info] Closing USB Connection." << endl;
+		cout << "\r\n[Info] Closing USB Connection." << endl;
 		libusb_release_interface(device, 0);
 		libusb_release_interface(device, 1);
 		libusb_close(device);
@@ -245,7 +245,7 @@ bool Device::SendCommand(const char* command) {
 		return false;
 	}
 
-	cout << "[Info] Sent " << command << " to device" << endl;
+	//cout << "[Info] Sent " << command << " to device" << endl;
 	return true;
 }
 

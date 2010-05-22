@@ -17,6 +17,7 @@
  */
 
 #include <iostream>
+#include <signal.h>
 #include "headers/Device.h"
 
 using namespace std;
@@ -24,6 +25,7 @@ using namespace std;
 #define VERSION "1.0.4"
 
 bool init();
+void shutdown(int sig);
 int setup(int argc, char *argv[]);
 void help();
 void warranty();
@@ -38,7 +40,19 @@ bool init() {
 	}
 
 	cout << "[Device] Connected." << endl;
+
+	(void) signal(SIGTERM, shutdown);
+	(void) signal(SIGQUIT, shutdown);
+	(void) signal(SIGINT, shutdown);
+
 	return true;
+}
+
+void shutdown(int sig) {
+
+	MobileDevice.Disconnect();
+	exit(1);
+
 }
 
 int setup(int argc, char *argv[]) {
@@ -117,6 +131,7 @@ int setup(int argc, char *argv[]) {
 		}
 	}
 
+	MobileDevice.Disconnect();
 	return 1;
 }
 
