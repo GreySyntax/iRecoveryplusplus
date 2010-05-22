@@ -29,8 +29,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #include <libusb-1.0/libusb.h>
+
+#define CMD_LOG ".history"
 
 class Device {
 public:

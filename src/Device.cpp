@@ -98,6 +98,7 @@ bool Device::Console() {
 
 	//TODO Logging
 
+	read_history(CMD_LOG);
 	int bytes = 0, i = 0;
 
 	while (true) {
@@ -117,7 +118,8 @@ bool Device::Console() {
 		char* command = readline("MobileDevice$ ");
 
 		if (command != NULL) {
-			//add_history
+			add_history(command);
+			write_history(CMD_LOG);
 			SendCommand(command);
 		}
 	}
@@ -191,7 +193,7 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 			if (libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) == 6) {
 				if (response[4] == 5) {
 
-					cout << "[IO] Sucessfully transfered " << (i + 1) << " of " << packets << endl;
+					//cout << "[IO] Sucessfully transfered " << (i + 1) << " of " << packets << endl;
 					continue;
 				}
 
