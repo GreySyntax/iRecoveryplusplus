@@ -94,7 +94,14 @@ int setup(int argc, char *argv[]) {
 				return -1;
 
 		} else if (! strcmp(argv[i], "-s")) {
-			//TODO screen
+			if (! MobileDevice.IsConnected()) {
+				if (! init())
+					return -1;
+			}
+
+			if (! MobileDevice.Console()) {
+				return -1;
+			}
 		} else if (! strcmp(argv[i], "-warranty")) {
 
 			warranty();
@@ -154,10 +161,10 @@ void conditions() {
 
 int main(int argc, char *argv[]) {
 
-    cout << "iRecovery++  Copyright (C) 2010  GreySyntax\r\n";
-    cout << "This program comes with ABSOLUTELY NO WARRANTY; for details `./iRecovery -warranty'.\r\n";
-    cout << "This is free software, and you are welcome to redistribute it\r\n";
-    cout << "under certain conditions; type `./iRecovery -conditions' for details.\r\n" << endl;
+	cout << "iRecovery++  Copyright (C) 2010  GreySyntax\r\n";
+	cout << "This program comes with ABSOLUTELY NO WARRANTY; for details `./iRecovery -warranty'.\r\n";
+	cout << "This is free software, and you are welcome to redistribute it\r\n";
+	cout << "under certain conditions; type `./iRecovery -conditions' for details.\r\n" << endl;
 
 	return setup(argc, argv);
 }

@@ -37,6 +37,7 @@ public:
 	Device();
 	bool AutoBoot();
 	bool Connect();
+	bool Console();
 	void Disconnect();
 	bool Exploit(const char* file);
 	bool IsConnected();

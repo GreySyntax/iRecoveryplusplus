@@ -53,6 +53,7 @@ bool Device::Connect() {
 	if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, RECV_MODE)) == NULL) {
 		if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, WTF_MODE)) == NULL) {
 			if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, DFU_MODE)) == NULL) {
+				cout << "[Info] Failed to connect." << endl;
 				return false;
 			}
 		}
@@ -70,7 +71,7 @@ bool Device::Connect() {
 		}
 	}
 
-	if (libusb_claim_interface(device, 0) < 0) {
+	if (libusb_claim_interface(device, 0) < 0 || libusb_claim_interface(device, 1) < 0) {
 		cout << "[Info] Error claiming interface." << endl;
 		//If at first you don't succeed, try, try again.
 		//Then quit. There's no point in being a damn fool about it.
@@ -78,6 +79,49 @@ bool Device::Connect() {
 	}
 
 	//It's not enough that I should succeed - others should fail.
+	return true;
+}
+
+bool Device::Console() {
+
+	if (libusb_set_interface_alt_setting(device, 1, 1) < 0)
+	{
+		cout << "[Info] Error setting interface." << endl;
+		return false;
+	}
+
+	char* buffer;
+	if ((buffer = (char*)malloc(BUF_SIZE)) == NULL) {
+		cout << "[Info] Failed to allocate memory." << endl;
+		return false;
+	}
+
+	//TODO Logging
+
+	int bytes = 0, i = 0;
+
+	while (true) {
+
+		bytes = 0;
+		memset(buffer, 0 , BUF_SIZE);
+
+		libusb_bulk_transfer(device, 0x81, (unsigned char*)buffer, BUF_SIZE, &bytes, 500);
+
+		if (bytes > 0) {
+			for (i = 0; i < bytes; i++) {
+				cout << (char)buffer[i];
+			}
+			cout << endl;
+		}
+
+		char* command = readline("MobileDevice$ ");
+
+		if (command != NULL) {
+			//add_history
+			SendCommand(command);
+		}
+	}
+
 	return true;
 }
 
@@ -138,13 +182,13 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 
 		int len = last;
 
-		if ((i + 1) < packets) len = 0x800;
-			sent += len;
+		if ((i + 1) < packets)
+			len = 0x800;
 
-		if (libusb_control_transfer(device, 0x21, 1, i, 0, (unsigned char*)&buffer[i * 0x800], len, 1000)) {
+		sent += len;
 
+		if (libusb_control_transfer(device, 0x21, 1, i, 0, (unsigned char*)&buffer[index + (i * 0x800)], len, 1000)) {
 			if (libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) == 6) {
-
 				if (response[4] == 5) {
 
 					cout << "[IO] Sucessfully transfered " << (i + 1) << " of " << packets << endl;
@@ -191,7 +235,7 @@ bool Device::SendCommand(const char* command) {
 
 	int length = strlen(command);
 
-	if (length >= 0x100) {
+	if (length >= 0x200) {
 		cout << "[Info] Failed to send command (to long)." << endl;
 		return false;
 	}
