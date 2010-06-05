@@ -26,10 +26,20 @@
 #define DFU_MODE        0x1222
 #define BUF_SIZE        0x10000
 
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <libusb-1.0/libusb.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+
+extern "C" {
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+}
+
 
 #define CMD_LOG ".history"
 

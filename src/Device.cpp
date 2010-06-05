@@ -16,13 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <libusb-1.0/libusb.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 #include "headers/Device.h"
 
 using namespace std;

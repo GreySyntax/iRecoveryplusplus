@@ -16,23 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <signal.h>
+#include "headers/Program.h"
 #include "headers/Device.h"
 
 using namespace std;
 
-#define VERSION "1.0.4"
-
-bool init();
-void shutdown(int sig);
-int setup(int argc, char *argv[]);
-void help();
-void warranty();
-void conditions();
-
 static Device MobileDevice;
 
+void info(bool a, bool c, bool u, bool e, bool s, bool w, bool o) {
+	if (a)
+		cout << "-a\t\tenable auto-boot and restart the phone" << endl;
+	if (c)
+		cout << "-c <arg>\tsend a command to iBoot/iBSS" << endl;
+	if (u)
+		cout << "-u <arg>\tupload a file" << endl;
+	if (e)
+		cout << "-e <arg>\tupload a file and execute usb control exploit (0x21)" << endl;
+	if (s)
+		cout << "-s\t\tstart an interactive shell with iBoot/iBSS" << endl;
+	if (w)
+		cout << "-w\t\tshow warranty information" << endl;
+	if (o)
+		cout << "-o\t\tshow conditions" << endl;
+}
 bool init() {
 	if (! MobileDevice.Connect()) {
 		cout << "[Device] Failed to Connect." << endl;
@@ -57,81 +63,106 @@ void shutdown(int sig) {
 
 int setup(int argc, char *argv[]) {
 
-	if (argv < 0) {
-		//help();
+
+	if (argc == 1) {
+		info(true, true, true, true, true, true, true);
 		return -1;
 	}
 
-	for (int i = 1; i < argc; i++) {
-		if (! strcmp(argv[i], "-h")) {
-			//help();
+	int c;
+
+	while ((c = getopt (argc, argv, "acueswoh?:")) != -1) {
+
+		switch(c) {
+
+		case 'a':
+			if (! MobileDevice.IsConnected())
+				if (! init()) return -1;
+			if (! MobileDevice.AutoBoot()) return -1;
 			return 1;
-		} else if (! strcmp(argv[i], "-a")) {
-			if (! MobileDevice.IsConnected()) {
-				if (! init())
-					return -1;
-			}
+			break;
 
-			if (! MobileDevice.AutoBoot())
+		case 'c':
+			if (! MobileDevice.IsConnected())
+				if (! init()) return -1;
+			if (! MobileDevice.SendCommand(optarg))
 				return -1;
+			break;
 
-			return 1;
-
-		} else if (! strcmp(argv[i], "-c")) {
-			if (! MobileDevice.IsConnected()) {
-				if (! init())
-					return -1;
-			}
-
-			i++;
-			if (! MobileDevice.SendCommand(argv[i]))
+		case 'u':
+			if (! MobileDevice.IsConnected())
+				if (! init()) return -1;
+			if (! MobileDevice.Upload(optarg))
 				return -1;
+			break;
 
-		} else if (! strcmp(argv[i], "-u")) {
-			if (! MobileDevice.IsConnected()) {
-				if (! init())
-					return -1;
-			}
-
-			i++;
-			if (! MobileDevice.Upload(argv[i]))
+		case 'e':
+			if (! MobileDevice.IsConnected())
+				if (! init()) return -1;
+			if (! MobileDevice.Exploit(optarg))
 				return -1;
+			break;
 
-		} else if (! strcmp(argv[i], "-e")) {
-			if (! MobileDevice.IsConnected()) {
-				if (! init())
-					return -1;
-			}
-
-			i++;
-			if (! MobileDevice.Exploit(argv[i]))
+		case 's':
+			if (! MobileDevice.IsConnected())
+				if (! init()) return -1;
+			if (! MobileDevice.Console())
 				return -1;
+			break;
 
-		} else if (! strcmp(argv[i], "-s")) {
-			if (! MobileDevice.IsConnected()) {
-				if (! init())
-					return -1;
-			}
-
-			if (! MobileDevice.Console()) {
-				return -1;
-			}
-		} else if (! strcmp(argv[i], "-warranty")) {
-
+		case 'w':
 			warranty();
-			return 1;
+			break;
 
-		} else if(! strcmp(argv[i], "-conditions")) {
-
+		case 'o':
 			conditions();
-			return 1;
+			break;
 
-		} else {
-			//help();
+		case 'h':
+		case '?':
+			switch((char)optarg[0]) {
+			case 'a':
+				info(true, false, false, false, false, false, false);
+				break;
+
+			case 'c':
+				info(false, true, false, false, false, false, false);
+				break;
+
+			case 'u':
+				info(false, false, true, false, false, false, false);
+				break;
+
+			case 'e':
+				info(false, false, false, true, false, false, false);
+				break;
+
+			case 's':
+				info(false, false, false, false, true, false, false);
+				break;
+
+			case 'w':
+				info(false, false, false, false, false, true, false);
+				break;
+
+			case 'o':
+				info(false, false, false, false, false, false, true);
+				break;
+
+			default:
+				info(true, true, true, true, true, true, true);
+				break;
+			}
+		break;
+
+		default:
+			info(true, true, true, true, true, true, true);
 		}
 	}
 
-	MobileDevice.Disconnect();
+	if (MobileDevice.IsConnected())
+		MobileDevice.Disconnect();
+
 	return 1;
 }
 
@@ -177,9 +208,9 @@ void conditions() {
 int main(int argc, char *argv[]) {
 
 	cout << "iRecovery++  Copyright (C) 2010  GreySyntax\r\n";
-	cout << "This program comes with ABSOLUTELY NO WARRANTY; for details `./iRecovery -warranty'.\r\n";
+	cout << "This program comes with ABSOLUTELY NO WARRANTY; for details `./iRecovery -w'.\r\n";
 	cout << "This is free software, and you are welcome to redistribute it\r\n";
-	cout << "under certain conditions; type `./iRecovery -conditions' for details.\r\n" << endl;
+	cout << "under certain conditions; type `./iRecovery -o' for details.\r\n" << endl;
 
 	return setup(argc, argv);
 }
