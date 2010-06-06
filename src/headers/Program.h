@@ -21,6 +21,8 @@
 
 #include <iostream>
 #include <signal.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #define VERSION "1.0.7"
 

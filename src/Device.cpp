@@ -240,7 +240,7 @@ bool Device::SendCommand(const char* command) {
 		return false;
 	}
 
-	//cout << "[Info] Sent " << command << " to device" << endl;
+	cout << "[Info] Sent " << command << " to device" << endl;
 	return true;
 }
 

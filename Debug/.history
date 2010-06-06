@@ -9,3 +9,17 @@ bgcolor\040100\0400\040100
 go
 bootx
 
+
+
+
+
+
+bgcolor\040255\0400\0400
+setpicture\0400
+bgcolor\040255\0400\0400
+go
+bootx
+
+reboot
+/exit
+reboot

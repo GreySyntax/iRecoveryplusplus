@@ -71,7 +71,7 @@ int setup(int argc, char *argv[]) {
 
 	int c;
 
-	while ((c = getopt (argc, argv, "acueswoh?:")) != -1) {
+	while ((c = getopt (argc, argv, "ac:u:e:swoh:?:")) != -1) {
 
 		switch(c) {
 
