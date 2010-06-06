@@ -20,11 +20,18 @@
 
 using namespace std;
 
+/***
+ * Initialize the usb api.
+ */
 Device::Device() {
 
 	libusb_init(NULL);
 }
 
+/***
+ * Set the auto-boot environment variable to true,
+ * this can be used to exit some recovery loops.
+ */
 bool Device::AutoBoot() {
 
 	if(SendCommand("setenv auto-boot true")) {
@@ -41,6 +48,10 @@ bool Device::AutoBoot() {
 	return false;
 }
 
+/***
+ * Connect to the device, this will loop through recovery, wtf and dfu mode while searching.
+ * This also claim's the USB interface so make sure to free them propperly!
+ */
 bool Device::Connect() {
 
 	if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, RECV_MODE)) == NULL) {
@@ -75,6 +86,10 @@ bool Device::Connect() {
 	return true;
 }
 
+/***
+ * Initialize a terminal session with iBoot/iBSS.
+ * This is a command promt like interface (output from iBoot is shit).
+ */
 bool Device::Console() {
 
 	if (libusb_set_interface_alt_setting(device, 1, 1) < 0)
@@ -88,8 +103,6 @@ bool Device::Console() {
 		cout << "[Info] Failed to allocate memory." << endl;
 		return false;
 	}
-
-	//TODO Logging
 
 	read_history(CMD_LOG);
 	int bytes = 0, i = 0;
@@ -108,6 +121,7 @@ bool Device::Console() {
 			cout << endl;
 		}
 
+		//Grab input
 		char* command = readline("MobileDevice$ ");
 
 		if (command != NULL) {
@@ -120,6 +134,9 @@ bool Device::Console() {
 	return true;
 }
 
+/***
+ * Close the connection and free the interfaces.
+ */
 void Device::Disconnect() {
 
 	if (device != NULL) {
@@ -130,36 +147,46 @@ void Device::Disconnect() {
 	}
 }
 
+/***
+ * Upload a file (if specified) then attempt to use the usb control exploit.
+ */
 bool Device::Exploit(const char* file) {
 
 	cout << "[Info] Attempting to send exploit" << endl;
 
-	if (Upload(file)) {
+	if (file != NULL)
+		Upload(file);
 
-		if (! libusb_control_transfer(device, 0x21, 2, 0, 0, 0, 0, 1000)) {
+	if (! libusb_control_transfer(device, 0x21, 2, 0, 0, 0, 0, 1000)) {
 
-			cout << "[Info] Failed to send exploit" << endl;
-			return false;
-		}
-
-		cout << "[Info] Succesfully sent exploit" << endl;
-		return true;
+		cout << "[Info] Failed to send exploit" << endl;
+		return false;
 	}
 
-	cout << "[Info] Failed to sent exploit" << endl;
-	return false;
+	cout << "[Info] Succesfully sent exploit" << endl;
+	return true;
 }
 
+/***
+ * Check if were connected to a device.
+ */
 bool Device::IsConnected() {
 
 	return device == NULL ? false : true;
 }
 
+/***
+ * Reset the usb connection/interfaces saves unplugging and replugging the device.
+ */
 void Device::Reset() {
 
 	libusb_reset_device(device);
 }
 
+/***
+ * Send a char buffer to the device,
+ * we can send from any position in the buffer aslong as the remaning data is long enough.
+ */
 bool Device::SendBuffer(char* buffer, int index, int length) {
 
 	int packets, last, pos = (length - index);
@@ -226,6 +253,10 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 	return true;
 }
 
+/***
+ * Send a standard command to iBoot/iBSS.
+ * TODO: getenv support
+ */
 bool Device::SendCommand(const char* command) {
 
 	int length = strlen(command);
@@ -244,6 +275,9 @@ bool Device::SendCommand(const char* command) {
 	return true;
 }
 
+/***
+ * Read the contents of a file to a char array and call SendBuffer.
+ */
 bool Device::Upload(const char* file) {
 
 	FILE* data = fopen(file, "rb");
