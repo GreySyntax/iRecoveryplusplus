@@ -271,6 +271,14 @@ bool Device::SendCommand(const char* command) {
 		return false;
 	}
 
+	char* action = strtok(strdup(command), " ");
+
+	if (! strcmp(action, "getenv")) {
+		unsigned char response[0x200];
+		libusb_control_transfer(device, 0xC0, 0, 0, 0, response, 0x200, 1000);
+		cout << response << endl;
+	}
+
 	//cout << "[Info] Sent " << command << " to device" << endl;
 	return true;
 }
