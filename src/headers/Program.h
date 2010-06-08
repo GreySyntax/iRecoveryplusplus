@@ -30,8 +30,15 @@
 #include <ctype.h>
 #include <string>
 
+extern "C" {
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+}
+
 #define VERSION "1.0.7"
 
+void report_errors(lua_State *L, int status);
 bool call_plugin(const char* name);
 bool load_plugins();
 void info(bool a, bool c, bool u, bool e, bool s, bool w, bool o);

@@ -17,6 +17,7 @@
  */
 
 #include "headers/Device.h"
+#include "headers/Program.h"
 
 using namespace std;
 
@@ -127,7 +128,11 @@ bool Device::Console() {
 		if (command != NULL) {
 			add_history(command);
 			write_history(CMD_LOG);
-			SendCommand(command);
+
+			if (command[0] != '/')
+				SendCommand(command);
+			else
+				call_plugin(string(command).substr(1).c_str());
 		}
 	}
 
@@ -255,7 +260,6 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 
 /***
  * Send a standard command to iBoot/iBSS.
- * TODO: getenv support
  */
 bool Device::SendCommand(const char* command) {
 

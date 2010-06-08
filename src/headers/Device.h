@@ -34,13 +34,6 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-extern "C" {
-	#include "lua.h"
-	#include "lualib.h"
-	#include "lauxlib.h"
-}
-
-
 #define CMD_LOG ".history"
 
 class Device {

@@ -25,10 +25,18 @@ static vector<string> Plugins;
 static Device MobileDevice;
 static lua_State *L;
 
+void report_errors(lua_State *L, int status)
+{
+	if ( status != 0 ) {
+		std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1); // remove error message
+	}
+}
+
 bool call_plugin(const char* name) {
 	char file[0x800], file2[0x800];
 	strcpy(file, name);
-	strcat(file, ".irecv");
+	strcat(file, ".lua");
 	vector<string>::iterator it;
 	it = find(Plugins.begin(), Plugins.end(), file);
 
@@ -38,9 +46,14 @@ bool call_plugin(const char* name) {
 	strcpy(file2, "./plugins/");
 	strcat(file2, file);
 
-	cout << file2 << endl;
-	luaL_dofile(L, file);
-	lua_close(L);
+	int s = luaL_loadfile(L, file2);
+
+	if (s == 0) {
+		s = lua_pcall(L, 0, LUA_MULTRET, 0);
+	}
+
+	report_errors(L, s);
+	std::cerr << std::endl;
 	return true;
 }
 
@@ -55,16 +68,16 @@ bool load_plugins() {
 		while ((loc = readdir(path)) != NULL) {
 
 			string fname = string(loc->d_name);
-			if (fname != "." && fname != ".." && fname.substr(fname.find_last_of(".") + 1) == "irecv")
+			if (fname != "." && fname != ".." && fname.substr(fname.find_last_of(".") + 1) == "lua")
 				Plugins.push_back(fname);
 		}
 
 		if (Plugins.size() > 0) {
 			L = lua_open();
 			luaL_openlibs(L);
-			//TODO Register functions
 		}
-		call_plugin("test");
+
+		//call_plugin("test");
 		closedir(path);
 		return true;
 	}
