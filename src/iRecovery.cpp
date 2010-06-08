@@ -21,7 +21,57 @@
 
 using namespace std;
 
+static vector<string> Plugins;
 static Device MobileDevice;
+static lua_State *L;
+
+bool call_plugin(const char* name) {
+	char file[0x800], file2[0x800];
+	strcpy(file, name);
+	strcat(file, ".irecv");
+	vector<string>::iterator it;
+	it = find(Plugins.begin(), Plugins.end(), file);
+
+	if (it == Plugins.end())
+		return false;
+
+	strcpy(file2, "./plugins/");
+	strcat(file2, file);
+
+	cout << file2 << endl;
+	luaL_dofile(L, file);
+	lua_close(L);
+	return true;
+}
+
+bool load_plugins() {
+
+	Plugins = vector<string>();
+	DIR *path;
+
+	if ((path = opendir("./plugins")) != NULL) {
+
+		struct dirent *loc;
+		while ((loc = readdir(path)) != NULL) {
+
+			string fname = string(loc->d_name);
+			if (fname != "." && fname != ".." && fname.substr(fname.find_last_of(".") + 1) == "irecv")
+				Plugins.push_back(fname);
+		}
+
+		if (Plugins.size() > 0) {
+			L = lua_open();
+			luaL_openlibs(L);
+			//TODO Register functions
+		}
+		call_plugin("test");
+		closedir(path);
+		return true;
+	}
+
+	cout << "[Error] # " << errno << " while opening \"./plugins\"";
+	return false;
+}
 
 void info(bool a, bool c, bool u, bool e, bool s, bool w, bool o) {
 	if (a)
@@ -68,6 +118,9 @@ int setup(int argc, char *argv[]) {
 		info(true, true, true, true, true, true, true);
 		return -1;
 	}
+
+	if (! load_plugins())
+		return -1;
 
 	int c;
 

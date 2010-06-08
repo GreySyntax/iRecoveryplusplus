@@ -19,13 +19,21 @@
 #ifndef PROGRAM_H_
 #define PROGRAM_H_
 
+#include <sys/types.h>
+#include <dirent.h>
+#include <errno.h>
+#include <vector>
 #include <iostream>
 #include <signal.h>
+#include <iterator>
 #include <unistd.h>
 #include <ctype.h>
+#include <string>
 
 #define VERSION "1.0.7"
 
+bool call_plugin(const char* name);
+bool load_plugins();
 void info(bool a, bool c, bool u, bool e, bool s, bool w, bool o);
 bool init();
 void shutdown(int sig);
