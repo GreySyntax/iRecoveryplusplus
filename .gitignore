@@ -1,4 +1,7 @@
-/Debug
+
+/Debug/.DS_Store
+/Debug/.history
+/Debug/src
 .classpath
 .project
 .settings
