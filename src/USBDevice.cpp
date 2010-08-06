@@ -326,7 +326,7 @@ bool USBDevice::SendCommand(const char* command) {
 
 	int length = strlen(command);
 
-	if (length >= 0x200) {
+	if (length > 0x200) {
 		cout << "[Info] Failed to send command (to long)." << endl;
 		return false;
 	}
