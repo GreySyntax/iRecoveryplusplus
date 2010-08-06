@@ -1,6 +1,6 @@
 /***
  * iRecovery++ libusb based usb interface for iBoot and iBSS
- * Copyright © 2010  GreySyntax
+ * Copyright (C) 2010  GreySyntax
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,9 @@
 
 #define CMD_LOG ".history"
 
-class Device {
+class USBDevice {
 public:
-	Device();
+	USBDevice();
 	bool AutoBoot();
 	bool Connect();
 	bool Console();

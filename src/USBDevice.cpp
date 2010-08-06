@@ -1,6 +1,6 @@
 /***
  * iRecovery++ libusb based usb interface for iBoot and iBSS
- * Copyright © 2010  GreySyntax
+ * Copyright (C) 2010  GreySyntax
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "headers/Device.h"
+#include "headers/USBDevice.h"
 #include "headers/Program.h"
 
 using namespace std;
@@ -24,16 +24,16 @@ using namespace std;
 /***
  * Initialize the usb api.
  */
-Device::Device() {
+USBDevice::USBDevice() {
 
-	libusb_init(NULL);
+	//stub
 }
 
 /***
  * Set the auto-boot environment variable to true,
  * this can be used to exit some recovery loops.
  */
-bool Device::AutoBoot() {
+bool USBDevice::AutoBoot() {
 
 	if(SendCommand("setenv auto-boot true")) {
 		if (SendCommand("saveenv")) {
@@ -53,7 +53,12 @@ bool Device::AutoBoot() {
  * Connect to the device, this will loop through recovery, wtf and dfu mode while searching.
  * This also claim's the USB interface so make sure to free them propperly!
  */
-bool Device::Connect() {
+bool USBDevice::Connect() {
+
+	if (device != NULL)
+		Disconnect();
+
+	libusb_init(NULL);
 
 	if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, RECV_MODE)) == NULL) {
 		if ((device = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, WTF_MODE)) == NULL) {
@@ -87,11 +92,12 @@ bool Device::Connect() {
 	return true;
 }
 
+
 /***
  * Initialize a terminal session with iBoot/iBSS.
  * This is a command promt like interface (output from iBoot is shit).
  */
-bool Device::Console() {
+bool USBDevice::Console() {
 
 	if (libusb_set_interface_alt_setting(device, 1, 1) < 0)
 	{
@@ -142,20 +148,21 @@ bool Device::Console() {
 /***
  * Close the connection and free the interfaces.
  */
-void Device::Disconnect() {
+void USBDevice::Disconnect() {
 
 	if (device != NULL) {
 		cout << "\r\n[Info] Closing USB Connection." << endl;
-		libusb_release_interface(device, 0);
-		libusb_release_interface(device, 1);
+		//libusb_release_interface(device, 0);
+		//libusb_release_interface(device, 1);
 		libusb_close(device);
+		device = NULL;
 	}
 }
 
 /***
  * Upload a file (if specified) then attempt to use the usb control exploit.
  */
-bool Device::Exploit(const char* file) {
+bool USBDevice::Exploit(const char* file) {
 
 	cout << "[Info] Attempting to send exploit" << endl;
 
@@ -175,7 +182,7 @@ bool Device::Exploit(const char* file) {
 /***
  * Check if were connected to a device.
  */
-bool Device::IsConnected() {
+bool USBDevice::IsConnected() {
 
 	return device == NULL ? false : true;
 }
@@ -183,7 +190,7 @@ bool Device::IsConnected() {
 /***
  * Reset the usb connection/interfaces saves unplugging and replugging the device.
  */
-void Device::Reset() {
+void USBDevice::Reset() {
 
 	libusb_reset_device(device);
 }
@@ -192,20 +199,74 @@ void Device::Reset() {
  * Send a char buffer to the device,
  * we can send from any position in the buffer aslong as the remaning data is long enough.
  */
-bool Device::SendBuffer(char* buffer, int index, int length) {
+bool USBDevice::SendBuffer(char* buffer, int index, int length) {
 
-	int packets, last, pos = (length - index);
+	int packets = length / 0x800;
 
-	packets = pos % 0x800;
-	last = pos % 0x800;
+	if(length % 0x800)
+		packets++;
 
-	if (pos % 0x800) packets++;
-	if (! last) last = 0x800;
+	int last = length % 0x800;
 
-	unsigned int sent;
+	if(!last)
+		last = 0x800;
+
+	int i = 0;
+	unsigned int sizesent=0;
+
 	char response[6];
 
-	for (int i = 0; i < packets; i++) {
+	for(i = 0; i < packets; i++) {
+
+		int size = i + 1 < packets ? 0x800 : last;
+
+		sizesent+=size;
+		printf("[Device] Sending packet %d of %d (0x%08x of 0x%08x bytes)\r\n", i+1, packets, sizesent, length);
+
+		if(! libusb_control_transfer(device, 0x21, 1, i, 0, (unsigned char*)&buffer[i * 0x800], size, 1000)) {
+
+			printf("[Device] Error sending packet.\r\n");
+			return -1;
+
+		}
+
+		if( libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) != 6) {
+
+			printf("[Device] Error receiving status while uploading file.\r\n");
+			return -1;
+
+		}
+
+		if(response[4] != 5) {
+
+			printf("[Device] Invalid status error during file upload.\r\n");
+			return -1;
+		}
+
+		printf("[Device] Upload successfull.\r\n");
+	}
+
+	printf("[Device] Executing file.\r\n");
+
+	libusb_control_transfer(device, 0x21, 1, i, 0, (unsigned char*)buffer, 0, 1000);
+
+	for(i = 6; i <= 8; i++) {
+
+		if(libusb_control_transfer(device, 0xA1, 3, 0, 0, (unsigned char*)response, 6, 1000) != 6) {
+
+			printf("[Device] Error receiving execution status.\r\n");
+			return -1;
+		}
+
+		if(response[4] != i) {
+
+			printf("[Device] Invalid execution status.\r\n");
+			return -1;
+		}
+	}
+
+	/*
+	 for (int i = 0; i < packets; i++) {
 
 		int len = last;
 
@@ -252,7 +313,7 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 			continue;
 		}
 		return false;
-	}
+	}*/
 
 	cout << "[Info] Successfully transfered buffer" << endl;
 	return true;
@@ -261,7 +322,7 @@ bool Device::SendBuffer(char* buffer, int index, int length) {
 /***
  * Send a standard command to iBoot/iBSS.
  */
-bool Device::SendCommand(const char* command) {
+bool USBDevice::SendCommand(const char* command) {
 
 	int length = strlen(command);
 
@@ -283,14 +344,14 @@ bool Device::SendCommand(const char* command) {
 		cout << response << endl;
 	}
 
-	//cout << "[Info] Sent " << command << " to device" << endl;
+	cout << "[Info] Sent " << command << " to device" << endl;
 	return true;
 }
 
 /***
  * Read the contents of a file to a char array and call SendBuffer.
  */
-bool Device::Upload(const char* file) {
+bool USBDevice::Upload(const char* file) {
 
 	FILE* data = fopen(file, "rb");
 

@@ -1,6 +1,6 @@
 /***
  * iRecovery++ libusb based usb interface for iBoot and iBSS
- * Copyright © 2010  GreySyntax
+ * Copyright (C) 2010  GreySyntax
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@
  */
 
 #include "headers/Program.h"
-#include "headers/Device.h"
+#include "headers/USBDevice.h"
 
 using namespace std;
 
 static vector<string> Plugins;
-static Device MobileDevice;
+static USBDevice MobileDevice;
 static lua_State *L;
 
 void report_errors(lua_State *L, int status)

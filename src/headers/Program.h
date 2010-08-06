@@ -1,6 +1,6 @@
 /***
  * iRecovery++ libusb based usb interface for iBoot and iBSS
- * Copyright © 2010  GreySyntax
+ * Copyright (C) 2010  GreySyntax
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ extern "C" {
 	#include "lauxlib.h"
 }
 
-#define VERSION "1.0.7"
+#define VERSION "1.1.2"
 
 void report_errors(lua_State *L, int status);
 bool call_plugin(const char* name);
