@@ -12,3 +12,8 @@ This program is released under the GPL v3 see the LICENCE file for more details.
 
 === Usage ===
 (coming soon)
+
+== TODO ==
+- Finish lua scripting
+- Test old 'Device::Exploit()'
+- Cleanup 'iRecovery.cpp'
