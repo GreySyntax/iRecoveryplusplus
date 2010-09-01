@@ -1,9 +1,7 @@
-/Debug/.DS_Store
-/Debug/.history
-/Debug/src
 .classpath
 .project
 .settings
 .history
 .cproject
 .DS_Store
+/bin
