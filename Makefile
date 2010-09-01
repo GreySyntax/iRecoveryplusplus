@@ -1,6 +1,9 @@
 all:
 	@cd src;make;
 
+clean:
+	@cd src;make clean;
+
 mach:
 	@cd src;make mach;
 

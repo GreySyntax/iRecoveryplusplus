@@ -21,23 +21,23 @@ start:
 	@echo 'Building iRecovery++'
 	@echo ''
 
-linux:	clean $(OBJS)
+linux:	start $(OBJS)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXNIX)
 	
-mach:	start clean $(OBJS)
+mach:	start $(OBJS)
 	@mkdir ../bin;
-	@$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXOSX)
+	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXOSX)
 
-win:	clean $(OBJS)
+win:	start $(OBJS)
 	@mkdir ../bin;
-	@$(CXX) -o $(TARGET) $(OBJS) $(CXXALL) $(CXXWIN)
+	$(CXX) -o $(TARGET) $(OBJS) $(CXXALL) $(CXXWIN)
 
 backup:
 	@if [ ! -e ../backup ]; then mkdir ../backup; fi;
 	@zip ../backup/`date +%d-%m-%y_%H.%M`.zip $(SOURCE) $(HEADERS) $(EXTRA_FILES)
 	@echo $(SOURCE)
 clean:
-	@rm *.o
+	@rm ../src/*.o
 	@rm -rf ../bin
 
