@@ -6,14 +6,8 @@ This program is compatible with Mac OS X, Linux and possibly windows (if libusb 
 This program is released under the GPL v3 see the LICENCE file for more details.
 
 === Requirements ===
-- g++ or another C++ compiler
-- libusb-1.0
+- libusb-0.1 (windows) / libusb-1.0 (everything else)
 - libreadline
 
-=== Usage ===
-(coming soon)
-
 == TODO ==
-- Finish lua scripting
-- Test old 'Device::Exploit()'
-- Cleanup 'iRecovery.cpp'
+- Everything
