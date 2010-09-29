@@ -36,6 +36,7 @@ win:	start $(SOURCE)
 	@rm ../src/*.o
 
 backup:
+	@echo $(SOURCE) $(HEADERS) $(EXTRA_FILES)
 	@if [ ! -e ../backup ]; then mkdir ../backup; fi;
 	@zip ../backup/`date +%d-%m-%y_%H.%M`.zip $(SOURCE) $(HEADERS) $(EXTRA_FILES)
 	@echo $(SOURCE)
