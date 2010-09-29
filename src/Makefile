@@ -23,17 +23,17 @@ start:
 
 linux:	start $(SOURCE)
 	@mkdir ../bin;
-	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXNIX)
+	$(CXX) -o $(TARGET) $(SOURCE) $(CXXCSS) $(CXXALL) $(CXXNIX)
 	@rm ../src/*.o
 	
 mach:	start $(SOURCE)
 	@mkdir ../bin;
-	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXOSX)
+	$(CXX) -o $(TARGET) $(SOURCE) $(CXXCSS) $(CXXALL) $(CXXOSX)
 	@rm ../src/*.o
 
 win:	start $(SOURCE)
 	@mkdir ../bin;
-	$(CXX) -o $(TARGET) $(OBJS) $(CXXALL) $(CXXWIN)
+	$(CXX) -o $(TARGET) $(SOURCE) $(CXXALL) $(CXXWIN)
 	@rm ../src/*.o
 
 backup:
