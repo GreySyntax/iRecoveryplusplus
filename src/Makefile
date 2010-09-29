@@ -6,7 +6,6 @@ CXXNIX =	-lusb-1.0
 CXXOSX =	-lusb-1.0 -framework CoreFoundation -framework IOKit
 
 DIRS =		../src ../include
-OBJS =		Program.o USBDevice.o
 TARGET =	../bin/iRecovery
 
 EXTRA_FILES = 	../Makefile ../src/Makefile
@@ -22,17 +21,17 @@ start:
 	@echo ''
 	@rm -rf ../bin;
 
-linux:	start $(OBJS)
+linux:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXNIX)
 	@rm ../src/*.o
 	
-mach:	start $(OBJS)
+mach:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(OBJS) $(CXXCSS) $(CXXALL) $(CXXOSX)
 	@rm ../src/*.o
 
-win:	start $(OBJS)
+win:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(OBJS) $(CXXALL) $(CXXWIN)
 	@rm ../src/*.o
