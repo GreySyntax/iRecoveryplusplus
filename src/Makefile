@@ -1,6 +1,6 @@
 CXXFLAGS =	-O2 -g -Wall -fmessage-length=0 -I./include
 CXXALL =	-lreadline
-CXXCSS =	-I"/usr/local/include" -I"/opt/local/include" -L"/usr/local/lib" -L"/opt/local/lib"
+CXXCSS =	-I"../include" -I"/usr/local/include" -I"/opt/local/include" -L"/usr/local/lib" -L"/opt/local/lib"
 CXXWIN =	-lusb -I"C:\MinGW\include" -L"C:\MinGW\lib"
 CXXNIX =	-lusb-1.0
 CXXOSX =	-lusb-1.0 -framework CoreFoundation -framework IOKit
@@ -24,7 +24,6 @@ start:
 linux:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(SOURCE) $(CXXCSS) $(CXXALL) $(CXXNIX)
-	@rm ../src/*.o
 	
 mach:	start $(SOURCE)
 	@mkdir ../bin;

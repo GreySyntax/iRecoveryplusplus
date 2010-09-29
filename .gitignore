@@ -5,5 +5,4 @@
 .cproject
 .DS_Store
 /bin
-/backup
 /src/*.o
