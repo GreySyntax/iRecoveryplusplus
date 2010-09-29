@@ -37,7 +37,7 @@ public:
 	bool Close();
 	bool Configure(int mode);
 
-	bool Open(int VendorID, int ProductID);
+	bool Open(int vendorID, int productID);
 
 	bool ReleaseInterface(int interface);
 	void Reset();
