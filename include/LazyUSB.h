@@ -15,3 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "Win32.h"
+#if defined(WINDOWS)
+	/* lets support this at the lowest level! */
+	#include <usb.h>
+#else
+	#include <libusb-1.0/libusb.h>
+#endif
+
+#ifndef LAZYUSB_H_
+
+#define LAZYUSB_H_
+
+class LazyUSB {
+
+/*
+public:
+
+private:
+*/
+
+};
+
+#endif /* LAZYUSB_H_ */

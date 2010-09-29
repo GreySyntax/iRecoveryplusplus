@@ -37,7 +37,7 @@ enum {
 	kBufferSize		= 0x10000
 };
 
-class USBDevice {
+class IDevice {
 
 public:
 	virtual bool AutoBoot();
@@ -52,11 +52,7 @@ public:
 	virtual bool Upload(const char* file);
 
 private:
-#if defined(WINDOWS)
-	struct usb_device_handle *handle;
-#else
-	struct libusb_device_handle *handle;
-#endif
+	private LazyUsb USB;
 };
 
 #endif /* IDEVICE_H_ */
