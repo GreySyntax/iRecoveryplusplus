@@ -16,14 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Win32.h"
-#if defined(WINDOWS)
-	/* lets support this at the lowest level! */
-	#include <usb.h>
-#else
-	#include <libusb-1.0/libusb.h>
-#endif
-
 #ifndef IDEVICE_H_
 
 #define IDEVICE_H_

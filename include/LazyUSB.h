@@ -30,11 +30,15 @@
 
 class LazyUSB {
 
-/*
 public:
 
 private:
-*/
+#if defined(WINDOWS)
+	struct usb_device_handle *handle;
+#else
+	struct libusb_device_handle *handle;
+#endif
+};
 
 };
 
