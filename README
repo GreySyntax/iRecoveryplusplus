@@ -1,19 +1,6 @@
-=== What is iRecovery++? ===
-iRecovery++ is a program designed to communicate with the iPhone/iPod Touch/iPad via iBoot and iBSS via a USB interface.
-This program is compatible with Mac OS X, Linux and possibly windows (if libusb has been updated).
+=== New Repository ===
+This project can now be found here:
+- http://github.com/NSPwn/iRecoveryplusplus
 
-=== License ===
-This program is released under the GPL v3 see the LICENCE file for more details.
-
-=== Requirements ===
-- g++ or another C++ compiler
-- libusb-1.0
-- libreadline
-
-=== Usage ===
-(coming soon)
-
-== TODO ==
-- Finish lua scripting
-- Test old 'Device::Exploit()'
-- Cleanup 'iRecovery.cpp'
+The development branch is currently here:
+- http://github.com/NSPwn/iRecoveryplusplus/tree/dev
