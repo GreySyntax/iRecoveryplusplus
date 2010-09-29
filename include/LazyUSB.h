@@ -32,14 +32,23 @@ class LazyUSB {
 
 public:
 
+	bool ClaimInterface(int interface);
+	bool ClaimAltInterface(int interface);
+	bool Close();
+	bool Configure(int mode);
+
+	bool Open(int VendorID, int ProductID);
+
+	bool ReleaseInterface(int interface);
+	void Reset();
+
+	char* Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout);
+
 private:
-#if defined(WINDOWS)
+	#if defined(WINDOWS)
 	struct usb_device_handle *handle;
-#else
+	#else
 	struct libusb_device_handle *handle;
-#endif
+	#endif
 };
-
-};
-
 #endif /* LAZYUSB_H_ */
