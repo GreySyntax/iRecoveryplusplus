@@ -103,7 +103,35 @@ bool LazyUSB::Configure(int mode) {
 
 bool LazyUSB::Open(int vendorID, int productID) {
 
-	return false;
+
+	handle = NULL;
+	
+	#if defined(WINDOWS)
+	
+	struct usb_device *dev = NULL;
+	struct usb_bus *bus = NULL;
+	
+	usb_init();
+	usb_find_busses();
+	usb_find_devices();
+	
+	for (bus = usb_get_busses(); bus; bus = bus->next) {
+		for (dev = bus->devices; dev; dev = dev->next) {
+			if (dev->descriptor.idVendor == vendorID && dev->descriptor.idProduct == productID) {
+				handle = usb_open(dev);
+			}
+		}
+	}
+
+	if (handle == NULL) {	
+	#endif
+	if ((handle = libusb_open_device_with_vid_pid(NULL, vendorID, productID)) == NULL) {
+	#elif
+		cout << "[LazyUSB::Open] Failed to open usb device (Vendor: " << vendorID << ", ProductID: " << productID << ")" << endl;
+		return false;
+	}
+		
+	return true;
 }
 
 bool LazyUSB::ReleaseInterface(int interface) {
