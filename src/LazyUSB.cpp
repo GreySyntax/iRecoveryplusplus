@@ -15,3 +15,88 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "LazyUSB.h"
+
+using namespace std;
+
+bool LazyUSB::ClaimInterface(int interface) {
+
+	if (handle == NULL) {
+	
+		cout << "[LazyUSB::ClaimInterface] Device handle not initialized." << endl;
+		return false;
+	}
+	
+	#if defined(WINDOWS)
+	
+	#endif
+	
+	#elif
+	
+}
+
+bool LazyUSB::ClaimAltInterface(int interface) {
+	
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::ClaimAltInterface] Device handle not initialized." << endl;
+		return false;
+	}
+	
+	#if defined(WINDOWS)
+	
+	#endif
+	
+	#elif
+}
+
+
+bool LazyUSB::Close() {
+	
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::Close] Device handle not initialized." << endl;
+		return true;
+	}
+	
+	#if defined(WINDOWS)
+	
+	#endif
+	
+	#elif
+}
+
+bool LazyUSB::Configure(int mode) {
+
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::Configure] Device handle not initialized." << endl;
+		return false;
+	}
+	
+	#if defined(WINDOWS)
+	
+	#endif
+	
+	#elif
+}
+
+bool LazyUSB::Open(int vendorID, int productID) {
+
+}
+
+char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
+
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::Transfer] Device handle not initialized." << endl;
+		return NULL;
+	}
+	
+	#if defined(WINDOWS)
+
+	#endif
+	
+	#elif
+}
