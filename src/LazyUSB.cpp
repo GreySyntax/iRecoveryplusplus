@@ -54,9 +54,11 @@ bool LazyUSB::ClaimAltInterface(int interface) {
 		cout << "[LazyUSB::ClaimAltInterface] Failed to claim alt interface (" << interface << ")." << endl;
 		return false;
 	}
+	
+	return true;
 	#endif
 	//Not supported directly
-	ClaimInterface(interface);
+	return ClaimInterface(interface);
 	#elif
 }
 
@@ -92,7 +94,7 @@ bool LazyUSB::Configure(int mode) {
 	#endif
 	if (libusb_set_configuration(handle, mode) < 0) {
 	#elif
-		cout << "[LazyYSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
+		cout << "[LazyUSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
 		return false;
 	}
 	
@@ -111,7 +113,13 @@ bool LazyUSB::ReleaseInterface(int interface) {
 		return false;
 	}
 	
+	#if defined(WINDOWS)
+	usb_release_interface(handle, interface);
+	#endif
+	libusb_release_interface(handle, interface);
+	#elif
 	
+	return true;
 }
 
 void LazyUSB::Reset() {
