@@ -103,6 +103,7 @@ bool LazyUSB::Configure(int mode) {
 
 bool LazyUSB::Open(int vendorID, int productID) {
 
+	return false;
 }
 
 bool LazyUSB::ReleaseInterface(int interface) {
@@ -138,7 +139,7 @@ void LazyUSB::Reset() {
 	#elif	
 }
 	
-char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
+int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
 
 	if (handle == NULL) {
 		
@@ -146,12 +147,13 @@ char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, ui
 		return NULL;
 	}
 	
-	//Since nothing is done
-	return NULL;
+	int res = 0;
 	
 	#if defined(WINDOWS)
-
+	res = usb_control_msg(handle, requestType, request, value, index, &data, length, timeout);
 	#endif
-	
+	res = libusb_control_transfer(handle, requestType, request, value, index, ((unsigned char*)(&data)), length, timeout);
 	#elif
+	
+	return res;
 }

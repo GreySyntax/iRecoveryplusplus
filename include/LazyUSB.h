@@ -42,7 +42,7 @@ public:
 	bool ReleaseInterface(int interface);
 	void Reset();
 
-	char* Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout);
+	int Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout);
 
 private:
 	#if defined(WINDOWS)
