@@ -135,8 +135,7 @@ void LazyUSB::Reset() {
 	usb_reset(handle);
 	#endif
 	libusb_reset_device(handle);
-	#elif
-	
+	#elif	
 }
 	
 char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
@@ -146,6 +145,9 @@ char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, ui
 		cout << "[LazyUSB::Transfer] Device handle not initialized." << endl;
 		return NULL;
 	}
+	
+	//Since nothing is done
+	return NULL;
 	
 	#if defined(WINDOWS)
 
