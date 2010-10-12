@@ -30,9 +30,9 @@ bool LazyUSB::ClaimInterface(int interface) {
 	
 	#if defined(WINDOWS)
 	if (usb_claim_interface(handle, interface) < 0) {
-	#endif
+	#else
 	if (libusb_claim_interface(handle, interface) < 0) {
-	#elif
+	#endif
 		cout << "[LazyUSB::ClaimInterface] Failed to claim usb interface (" << interface << ")." << endl;
 		return false;
 	}
@@ -56,10 +56,10 @@ bool LazyUSB::ClaimAltInterface(int interface) {
 	}
 	
 	return true;
-	#endif
+	#else
 	//Not supported directly -- AVOID USING IF POSSIBLE
 	return ClaimInterface(interface);
-	#elif
+	#endif
 }
 
 
@@ -73,9 +73,9 @@ bool LazyUSB::Close() {
 	
 	#if defined(WINDOWS)
 	usb_close(handle);
-	#endif
+	#else
 	libusb_close(handle);
-	#elif
+	#endif
 	
 	handle = NULL;
 	return true;
@@ -91,9 +91,9 @@ bool LazyUSB::Configure(int mode) {
 	
 	#if defined(WINDOWS)
 	if (usb_set_configuration(handle, mode) < 0) {
-	#endif
+	#else
 	if (libusb_set_configuration(handle, mode) < 0) {
-	#elif
+	#endif
 		cout << "[LazyUSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
 		return false;
 	}
@@ -124,9 +124,9 @@ bool LazyUSB::Open(int vendorID, int productID) {
 	}
 
 	if (handle == NULL) {	
-	#endif
+	#else
 	if ((handle = libusb_open_device_with_vid_pid(NULL, vendorID, productID)) == NULL) {
-	#elif
+	#endif
 		cout << "[LazyUSB::Open] Failed to open usb device (Vendor: " << vendorID << ", ProductID: " << productID << ")" << endl;
 		return false;
 	}
@@ -144,9 +144,9 @@ bool LazyUSB::ReleaseInterface(int interface) {
 	
 	#if defined(WINDOWS)
 	usb_release_interface(handle, interface);
-	#endif
+	#else
 	libusb_release_interface(handle, interface);
-	#elif
+	#endif
 	
 	return true;
 }
@@ -162,9 +162,9 @@ void LazyUSB::Reset() {
 	
 	#if defined(WINDOWS)
 	usb_reset(handle);
-	#endif
+	#else
 	libusb_reset_device(handle);
-	#elif	
+	#endif	
 }
 	
 int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
@@ -179,9 +179,9 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	
 	#if defined(WINDOWS)
 	res = usb_control_msg(handle, requestType, request, value, index, &data, length, timeout);
-	#endif
+	#else
 	res = libusb_control_transfer(handle, requestType, request, value, index, ((unsigned char*)(&data)), length, timeout);
-	#elif
+	#endif
 	
 	return res;
 }

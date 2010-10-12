@@ -28,12 +28,10 @@ linux:	start $(SOURCE)
 mach:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(SOURCE) $(CXXCSS) $(CXXALL) $(CXXOSX)
-	@rm ../src/*.o
 
 win:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(SOURCE) $(CXXALL) $(CXXWIN)
-	@rm ../src/*.o
 
 backup:
 	@if [ ! -e ../backup ]; then mkdir ../backup; fi;
