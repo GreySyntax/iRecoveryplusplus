@@ -57,7 +57,7 @@ bool LazyUSB::ClaimAltInterface(int interface) {
 	
 	return true;
 	#endif
-	//Not supported directly
+	//Not supported directly -- AVOID USING IF POSSIBLE
 	return ClaimInterface(interface);
 	#elif
 }
