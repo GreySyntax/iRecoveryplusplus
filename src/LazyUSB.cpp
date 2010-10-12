@@ -76,10 +76,13 @@ bool LazyUSB::Configure(int mode) {
 	}
 	
 	#if defined(WINDOWS)
-	
+	if (usb_set_configuration(handle, mode) < 0) {
 	#endif
-	
+	if (libusb_set_configuration(handle, mode) < 0) {
 	#elif
+		cout << "[LazyYSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
+		return false;
+	}
 }
 
 bool LazyUSB::Open(int vendorID, int productID) {
