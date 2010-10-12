@@ -29,10 +29,15 @@ bool LazyUSB::ClaimInterface(int interface) {
 	}
 	
 	#if defined(WINDOWS)
-	
+	if (usb_claim_interface(handle, interface) < 0) {
 	#endif
-	
+	if (libusb_claim_interface(handle, interface) < 0) {
 	#elif
+		cout << "[LazyUSB::ClaimInterface] Failed to claim usb interface (" << interface << ")." << endl;
+		return false;
+	}
+		
+	return true;
 	
 }
 
@@ -45,9 +50,13 @@ bool LazyUSB::ClaimAltInterface(int interface) {
 	}
 	
 	#if defined(WINDOWS)
-	
+	if (usb_set_altinterface(handle, interface) < 0) {
+		cout << "[LazyUSB::ClaimAltInterface] Failed to claim alt interface (" << interface << ")." << endl;
+		return false;
+	}
 	#endif
-	
+	//Not supported directly
+	ClaimInterface(interface);
 	#elif
 }
 
@@ -57,14 +66,17 @@ bool LazyUSB::Close() {
 	if (handle == NULL) {
 		
 		cout << "[LazyUSB::Close] Device handle not initialized." << endl;
-		return true;
+		return false;
 	}
 	
 	#if defined(WINDOWS)
-	
+	usb_close(handle);
 	#endif
-	
+	libusb_close(handle);
 	#elif
+	
+	handle = NULL;
+	return true;
 }
 
 bool LazyUSB::Configure(int mode) {
@@ -83,12 +95,42 @@ bool LazyUSB::Configure(int mode) {
 		cout << "[LazyYSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
 		return false;
 	}
+	
+	return true;
 }
 
 bool LazyUSB::Open(int vendorID, int productID) {
 
 }
 
+bool LazyUSB::ReleaseInterface(int interface) {
+	
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::ReleaseInterface] Device handle not initialized." << endl;
+		return false;
+	}
+	
+	
+}
+
+void LazyUSB::Reset() {
+	
+	
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::Reset] Device handle not initialized." << endl;
+		return;
+	}
+	
+	#if defined(WINDOWS)
+	usb_reset(handle);
+	#endif
+	libusb_reset_device(handle);
+	#elif
+	
+}
+	
 char* LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
 
 	if (handle == NULL) {
