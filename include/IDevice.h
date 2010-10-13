@@ -18,33 +18,35 @@
 
 #ifndef IDEVICE_H_
 
+#include "LazyUSB.h"
+
 #define IDEVICE_H_
 #define APPLE_VENDOR_ID 0x05AC
-
-enum {
-	kRecoveryMode	= 0x1281,
-	kNormalMode		= 0x1290,
-	kWTFMode		= 0x1227,
-	kDFUMode		= 0x1222,
-	kBufferSize		= 0x10000
-};
 
 class IDevice {
 
 public:
-	virtual bool AutoBoot();
-	virtual bool Connect();
-	virtual bool Console();
-	virtual void Disconnect();
-	virtual bool Exploit(const char* file);
-	virtual bool IsConnected();
-	virtual void Reset();
-	virtual bool SendCommand(const char* argv);
-	virtual bool SendBuffer(char* data, int index, int length);
-	virtual bool Upload(const char* file);
+	
+	//Constructors
+	IDevice();
+	~IDevice();
+	
+	//Methods
+	bool AutoBoot();
+	bool Connect();
+	bool Console();
+	void Disconnect();
+	bool Exploit(const char* file);
+	bool IsConnected();
+	void Reset();
+	bool SendCommand(const char* argv);
+	bool SendBuffer(char* data, int index, int length);
+	bool Upload(const char* file);
 
 private:
-	private LazyUsb USB;
+	
+	//Properties
+	private LazyUSB USB;
 };
 
 #endif /* IDEVICE_H_ */

@@ -45,6 +45,8 @@ public:
 	void Reset();
 
 	int Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout);
+	
+	bool IsConnected();
 
 private:
 	#if defined(WINDOWS)

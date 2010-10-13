@@ -20,6 +20,14 @@
 
 using namespace std;
 
+enum {
+	kRecoveryMode	= 0x1281,
+	kNormalMode		= 0x1290,
+	kWTFMode		= 0x1227,
+	kDFUMode		= 0x1222,
+	kBufferSize		= 0x10000
+};
+
 bool LazyUSB::ClaimInterface(int interface) {
 
 	if (handle == NULL) {
@@ -184,4 +192,14 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	#endif
 	
 	return res;
+}
+
+bool LazyUSB::IsConnected() {
+
+	if (handle == NULL) {
+		
+		return false;
+	}
+	
+	return true;
 }
