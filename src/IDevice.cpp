@@ -37,43 +37,43 @@ IDevice::IDevice() {
 
 bool IDevice::AutoBoot() {
 	
-	if (! USB->IsConnected()) {
+	if (! USB.IsConnected()) {
 		Connect();
 	}
 }
 
 bool IDevice::Connect() {
 	
-	if (USB->IsConnected()) {
+	if (USB.IsConnected()) {
 		Disconnect();
 	}
 	
-	if (! USB->Open(APPLE_VENDOR_ID, kRecoveryMode)) {
+	if (! USB.Open(APPLE_VENDOR_ID, kRecoveryMode)) {
 		
-		cout << "[IDevice::Connect] Failed to connect to recovery." << endl;
+		//cout << "[IDevice::Connect] Failed to connect to recovery." << endl;
 			
-		if (! USB->Open(APPLE_VENDOR_ID, kWTFMode)) {
+		if (! USB.Open(APPLE_VENDOR_ID, kWTFMode)) {
 		
-			cout << "[IDevice::Connect] Failed to connect to wtf." << endl;
+			//cout << "[IDevice::Connect] Failed to connect to wtf." << endl;
 			
-			if (! USB->Open(APPLE_VENDOR_ID, kDFUMode)) {
+			if (! USB.Open(APPLE_VENDOR_ID, kDFUMode)) {
 				
-				cout << "[IDevice::Connect] Failed to connect to dfu." << endl;
+				//cout << "[IDevice::Connect] Failed to connect to dfu." << endl;
 				return false;
 			}
 		}
 	}
 	
-	if (! USB->Configure(1)) {
+	if (! USB.Configure(1)) {
 		
-		cout << "[IDevice::Connect] Failed to set usb configuration." << endl;
+		//cout << "[IDevice::Connect] Failed to set usb configuration." << endl;
 		Disconnect();
 		return false;
 	}
 	
-	if (USB->ClaimInterface(0) || USB->ClaimInterface(1)) {
+	if (USB.ClaimInterface(0) || USB.ClaimInterface(1)) {
 	
-		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
+		//cout << "[IDevice::Connect] Failed to claim interface's." << endl;
 		Disconnect();
 		return false;
 	}
@@ -83,16 +83,16 @@ bool IDevice::Connect() {
 
 void IDevice::Disconnect() {
 	
-	if (! USB->IsConnected()) {
+	if (! USB.IsConnected()) {
 		return;
 	}
 	
-	USB->Close();
+	USB.Close();
 }
 
 bool IDevice::Exploit(const char* file) {
 	
-	if (! USB->IsConnected()) {
+	if (! USB.IsConnected()) {
 		Connect();
 	}
 	
@@ -101,11 +101,11 @@ bool IDevice::Exploit(const char* file) {
 
 void IDevice::Reset() {
 	
-	if (! USB->IsConnected()) {
+	if (! USB.IsConnected()) {
 		Connect();
 	}
 	
-	USB->Reset();
+	USB.Reset();
 }
 
 bool IDevice::SendCommand(const char* argv) {

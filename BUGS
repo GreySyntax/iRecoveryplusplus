@@ -1,4 +1,2 @@
 === Known Bugs ===
-:Does not compile
-::Looks like a linker error
 :make backup is flakey

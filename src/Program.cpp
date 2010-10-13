@@ -17,8 +17,11 @@
  */
  
 #include <iostream>
+#include "IDevice.h"
 
 using namespace std;
+
+static IDevice Device;
 
 int main(int argc, char *argv[]) {
 
@@ -27,5 +30,7 @@ int main(int argc, char *argv[]) {
 	cout << "This is free software, and you are welcome to redistribute it\r\n";
 	cout << "under certain conditions; type `./iRecovery -o' for details.\r\n" << endl;
 
+	Device.Connect();
+	Device.Disconnect();
 	return 1;
 }
