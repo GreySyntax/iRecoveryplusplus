@@ -29,7 +29,7 @@ public:
 	
 	//Constructors
 	IDevice();
-	~IDevice();
+	//~IDevice();
 	
 	//Methods
 	bool AutoBoot();
@@ -43,10 +43,10 @@ public:
 	bool SendBuffer(char* data, int index, int length);
 	bool Upload(const char* file);
 
-private:
+//private:
 	
 	//Properties
-	private LazyUSB USB;
+	LazyUSB *USB;
 };
 
 #endif /* IDEVICE_H_ */

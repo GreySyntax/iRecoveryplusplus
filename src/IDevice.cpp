@@ -37,15 +37,15 @@ IDevice::IDevice() {
 
 bool IDevice::AutoBoot() {
 	
-	if (! IsConnected) {
+	if (! USB->IsConnected()) {
 		Connect();
 	}
 }
 
 bool IDevice::Connect() {
 	
-	if (IsConnected) {
-		Close();
+	if (USB->IsConnected()) {
+		Disconnect();
 	}
 	
 	if (! USB->Open(APPLE_VENDOR_ID, kRecoveryMode)) {
@@ -67,14 +67,14 @@ bool IDevice::Connect() {
 	if (! USB->Configure(1)) {
 		
 		cout << "[IDevice::Connect] Failed to set usb configuration." << endl;
-		Close();
+		Disconnect();
 		return false;
 	}
 	
-	if (USB->ClaimInterface(0) || USBClaimInterface(1)) {
+	if (USB->ClaimInterface(0) || USB->ClaimInterface(1)) {
 	
 		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
-		Close();
+		Disconnect();
 		return false;
 	}
 	
@@ -83,35 +83,25 @@ bool IDevice::Connect() {
 
 void IDevice::Disconnect() {
 	
-	if (! IsConnected) {
+	if (! USB->IsConnected()) {
 		return;
 	}
 	
 	USB->Close();
 }
 
-void IDevice::Exploit(const char* file) {
+bool IDevice::Exploit(const char* file) {
 	
-	if (! IsConnected) {
+	if (! USB->IsConnected()) {
 		Connect();
 	}
 	
 	
 }
 
-bool IDevice::IsConnected() {
-	
-	if (USB->IsConnected) {
-		
-		return true;
-	}
-	
-	return false;
-}
-
 void IDevice::Reset() {
 	
-	if (! IsConnected) {
+	if (! USB->IsConnected()) {
 		Connect();
 	}
 	
