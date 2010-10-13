@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
 	cout << "under certain conditions; type `./iRecovery -o' for details.\r\n" << endl;
 
 	Device.Connect();
+	Device.SendCommand("reboot");
 	Device.Disconnect();
 	return 1;
 }

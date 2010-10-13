@@ -197,12 +197,31 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	
 	return res;
 }
+	
+int LazyUSB::Write(int endPoint, char *data, int length, int* actual_length, int timeout) {
+		
+	if (handle == NULL) {
+	
+		cout << "[LazyUSB::Write] Device handle not initialized." << endl;
+		return -1;
+	}
+	
+	int res = 0;
+	
+	#if defined(WINDOWS)
+	res = usb_bulk_write(handle, endPoint, data, length, timeout);
+	#else
+	res = libusb_bulk_transfer(handle, (unsigned char)endPoint, (unsigned char*)data, length, actual_length, timeout);
+	#endif
+	
+	return res;
+}
 
 bool LazyUSB::IsConnected() {
 
 	if (handle == NULL) {
 		
-		return false;
+	//	return false;
 	}
 	
 	return true;

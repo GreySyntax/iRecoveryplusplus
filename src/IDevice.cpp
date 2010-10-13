@@ -27,7 +27,9 @@ enum {
 	kNormalMode		= 0x1290,
 	kWTFMode		= 0x1227,
 	kDFUMode		= 0x1222,
-	kBufferSize		= 0x10000
+	kBufferSize		= 0x10000,
+	kCommandMaxLen	= 0x200,
+	kCommandTimeout = 500
 };
 
 IDevice::IDevice() {
@@ -110,6 +112,34 @@ void IDevice::Reset() {
 
 bool IDevice::SendCommand(const char* argv) {
 	
+	int length = strlen(argv);
+	
+	if (length > kCommandMaxLen) {
+	
+		cout << "[IDevice::SendCommand] Command to long, aborting." << endl;
+		return false;
+	}
+	
+	if (! USB.IsConnected()) {
+		Connect();
+	}
+	
+	if (! USB.Transfer(0x40, 0, 0, 0, (char*)argv, (length + 1), kCommandTimeout)) {
+	
+		cout << "[IDevice::SendCommand] Failed to send command." << endl;
+		return false;
+	}
+	
+	char* action = strtok(strdup(argv), " ");
+	
+	if (! strcmp(action, "getenv")) {
+		
+		char response[0x200];
+		USB.Transfer(0xC0, 0, 0, 0, response, 0x200, (kCommandTimeout * 2));
+		cout << response << endl;
+	}
+	
+	return true;
 }
 
 bool IDevice::SendBuffer(char* data, int index, int length) {

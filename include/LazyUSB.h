@@ -45,6 +45,7 @@ public:
 	void Reset();
 
 	int Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout);
+	int Write(int endPoint, char *data, int length, int* actual_length, int timeout);
 	
 	bool IsConnected();
 
