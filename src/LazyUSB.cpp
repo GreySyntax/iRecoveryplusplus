@@ -28,6 +28,11 @@ enum {
 	kBufferSize		= 0x10000
 };
 
+LazyUSB::LazyUSB() {
+		
+	handle = NULL;
+}
+
 bool LazyUSB::ClaimInterface(int interface) {
 
 	if (handle == NULL) {
@@ -192,7 +197,7 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	#if defined(WINDOWS)
 	res = usb_control_msg(handle, requestType, request, value, index, &data, length, timeout);
 	#else
-	res = libusb_control_transfer(handle, requestType, request, value, index, ((unsigned char*)(&data)), length, timeout);
+	res = libusb_control_transfer(handle, requestType, request, value, index, (unsigned char*)&data, length, timeout);
 	#endif
 	
 	return res;
@@ -221,7 +226,7 @@ bool LazyUSB::IsConnected() {
 
 	if (handle == NULL) {
 		
-	//	return false;
+		return false;
 	}
 	
 	return true;

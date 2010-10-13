@@ -33,7 +33,8 @@
 class LazyUSB {
 
 public:
-
+	LazyUSB();
+	
 	bool ClaimInterface(int interface);
 	bool ClaimAltInterface(int interface);
 	bool Close();

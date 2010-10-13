@@ -52,15 +52,15 @@ bool IDevice::Connect() {
 	
 	if (! USB.Open(APPLE_VENDOR_ID, kRecoveryMode)) {
 		
-		//cout << "[IDevice::Connect] Failed to connect to recovery." << endl;
+		cout << "[IDevice::Connect] Failed to connect to recovery." << endl;
 			
 		if (! USB.Open(APPLE_VENDOR_ID, kWTFMode)) {
 		
-			//cout << "[IDevice::Connect] Failed to connect to wtf." << endl;
+			cout << "[IDevice::Connect] Failed to connect to wtf." << endl;
 			
 			if (! USB.Open(APPLE_VENDOR_ID, kDFUMode)) {
 				
-				//cout << "[IDevice::Connect] Failed to connect to dfu." << endl;
+				cout << "[IDevice::Connect] Failed to connect to dfu." << endl;
 				return false;
 			}
 		}
@@ -68,15 +68,15 @@ bool IDevice::Connect() {
 	
 	if (! USB.Configure(1)) {
 		
-		//cout << "[IDevice::Connect] Failed to set usb configuration." << endl;
+		cout << "[IDevice::Connect] Failed to set usb configuration." << endl;
 		Disconnect();
 		return false;
 	}
 	
-	if (USB.ClaimInterface(0) || USB.ClaimInterface(1)) {
+	if (! USB.ClaimInterface(0) && ! USB.ClaimInterface(1)) {
 	
-		//cout << "[IDevice::Connect] Failed to claim interface's." << endl;
-		Disconnect();
+		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
+		//Disconnect();
 		return false;
 	}
 	
@@ -90,6 +90,7 @@ void IDevice::Disconnect() {
 	}
 	
 	USB.Close();
+	cout << "[IDevice::Disconnect] Closed connection." << endl;
 }
 
 bool IDevice::Exploit(const char* file) {
@@ -124,7 +125,7 @@ bool IDevice::SendCommand(const char* argv) {
 		Connect();
 	}
 	
-	if (! USB.Transfer(0x40, 0, 0, 0, (char*)argv, (length + 1), kCommandTimeout)) {
+	if (! USB.Transfer(0x40, 0, 0, 0, (char*)&argv, (length + 1), kCommandTimeout)) {
 	
 		cout << "[IDevice::SendCommand] Failed to send command." << endl;
 		return false;
