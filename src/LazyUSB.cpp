@@ -133,11 +133,15 @@ bool LazyUSB::Open(int vendorID, int productID) {
 
 	if (handle == NULL) {	
 	#else
+	libusb_init(NULL);
+	
 	if ((handle = libusb_open_device_with_vid_pid(NULL, vendorID, productID)) == NULL) {
 	#endif
 		cout << "[LazyUSB::Open] Failed to open usb device (Vendor: " << vendorID << ", ProductID: " << productID << ")" << endl;
 		return false;
 	}
+		
+	cout << "[LazyUSB::Open] Opened device with VendorID: " << vendorID << " and ProductID: " << productID << "." << endl;
 		
 	return true;
 }
