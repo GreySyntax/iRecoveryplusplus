@@ -180,7 +180,7 @@ bool IDevice::Upload(const char* file) {
 	fread(buffer, 1, length, data);
 	fclose(data);
 
-	int actual_length = (int)length;
+	int actual_length = 0;//((int)length) + 1;
 	
 	return SendBuffer(buffer, length, &actual_length);
 }
