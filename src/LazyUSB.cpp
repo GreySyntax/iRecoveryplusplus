@@ -184,7 +184,7 @@ void LazyUSB::Reset() {
 	#endif	
 }
 	
-int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, char* data, uint16_t length, int timeout) {
+int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, const char* data, uint16_t length, int timeout) {
 
 	if (handle == NULL) {
 		

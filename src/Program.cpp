@@ -30,8 +30,11 @@ int main(int argc, char *argv[]) {
 	cout << "This is free software, and you are welcome to redistribute it\r\n";
 	cout << "under certain conditions; type `./iRecovery -o' for details.\r\n" << endl;
 
-	Device.Connect();
-	Device.SendCommand("reboot");
-	Device.Disconnect();
+	if (Device.Connect()) {
+		
+		Device.SendCommand("reboot");
+		Device.Disconnect();
+	}
+	
 	return 1;
 }

@@ -125,7 +125,7 @@ bool IDevice::SendCommand(const char* argv) {
 		Connect();
 	}
 	
-	if (! USB.Transfer(0x40, 0, 0, 0, (char*)&argv, (length + 1), kCommandTimeout)) {
+	if (! USB.Transfer(0x40, 0, 0, 0, argv, (length + 1), kCommandTimeout)) {
 	
 		cout << "[IDevice::SendCommand] Failed to send command." << endl;
 		return false;
