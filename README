@@ -6,8 +6,15 @@ This program is compatible with Mac OS X, Linux and possibly windows (if libusb 
 This program is released under the GPL v3 see the LICENCE file for more details.
 
 === Requirements ===
-- libusb-0.1 (windows) / libusb-1.0 (everything else)
-- libreadline
+:libusb-0.1 (windows) / libusb-1.0 (everything else)
+:libreadline
 
 == TODO ==
-- Everything
+:File transfer
+:Shell
+
+== Done ==
+:Command handlers (getenv)
+:Connect using LazyUSB
+:Disconnect (cleanly)
+

@@ -29,7 +29,8 @@ enum {
 	kDFUMode		= 0x1222,
 	kBufferSize		= 0x10000,
 	kCommandMaxLen	= 0x200,
-	kCommandTimeout = 500
+	kCommandTimeout = 500,
+	kUploadTimeout	= 1000
 };
 
 IDevice::IDevice() {
@@ -143,10 +144,43 @@ bool IDevice::SendCommand(const char* argv) {
 	return true;
 }
 
-bool IDevice::SendBuffer(char* data, int index, int length) {
+bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
 	
+	if (! USB.Write(4, data, length, actual_length, kUploadTimeout)) {
+		return false;
+	}
+	
+	return true;
 }
 
 bool IDevice::Upload(const char* file) {
 	
+	FILE* data = fopen(file, "rb");
+
+	if (data == NULL) {
+		cout << "[IDevice::Upload] Failed to open file " << file << endl;
+		return false;
+	}
+	
+	cout << "[IDevice::Upload] Attemtping to upload file" << endl;
+
+	fseek(data, 0, SEEK_END);
+	unsigned int length = ftell(data);
+	fseek(data, 0, SEEK_SET);
+
+	char* buffer = (char*)malloc(length);
+
+	if (buffer == NULL) {
+
+		cout << "[IDevice::Upload] Failed to allocate " << length << " bytes" << endl;
+		fclose(data);
+		return false;
+	}
+
+	fread(buffer, 1, length, data);
+	fclose(data);
+
+	int actual_length = (int)length;
+	
+	return SendBuffer(buffer, length, &actual_length);
 }

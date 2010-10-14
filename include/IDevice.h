@@ -41,7 +41,7 @@ public:
 	bool IsConnected();
 	void Reset();
 	bool SendCommand(const char* argv);
-	bool SendBuffer(char* data, int index, int length);
+	bool SendBuffer(char* data, int length, int* actual_length);
 	bool Upload(const char* file);
 
 private:

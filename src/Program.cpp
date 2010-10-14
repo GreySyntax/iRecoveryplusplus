@@ -32,11 +32,14 @@ int main(int argc, char *argv[]) {
 
 	if (Device.Connect()) {
 		
+		/*
 		cout << "AutoBoot: " << endl;
 		Device.SendCommand("getenv auto-boot");
 		Device.SendCommand("setenv auto-boot true");
 		Device.SendCommand("saveenv");
 		Device.SendCommand("reboot");
+		*/
+		Device.Upload("Makefile");
 		Device.Disconnect();
 	}
 	
