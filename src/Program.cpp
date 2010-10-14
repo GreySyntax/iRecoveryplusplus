@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 		Device.SendCommand("saveenv");
 		Device.SendCommand("reboot");
 		*/
-		Device.Upload("Makefile");
+		Device.Upload("../iBEC.n90ap.RELEASE.dfu");
 		Device.Disconnect();
 	}
 	

@@ -203,7 +203,7 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	return res;
 }
 	
-int LazyUSB::Write(int endPoint, char *data, int length, int* actual_length, int timeout) {
+int LazyUSB::Write(int endPoint, char* data, int length, int* actual_length, int timeout) {
 		
 	if (handle == NULL) {
 	
@@ -218,6 +218,8 @@ int LazyUSB::Write(int endPoint, char *data, int length, int* actual_length, int
 	#else
 	res = libusb_bulk_transfer(handle, (unsigned char)endPoint, (unsigned char*)data, length, actual_length, timeout);
 	#endif
+	
+	cout << "[LazyUSB::Write] Result: #" << res << endl;
 	
 	return res;
 }
