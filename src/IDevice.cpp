@@ -146,7 +146,8 @@ bool IDevice::SendCommand(const char* argv) {
 
 bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
 	
-	if (! USB.Write(4, data, length, actual_length, (kUploadTimeout * 10))) {
+	if (USB.Write(4, data, length, actual_length, kUploadTimeout) != 0) {
+		
 		return false;
 	}
 	
