@@ -169,10 +169,17 @@ void IDevice::Shell() {
 		Connect();
 	}
     
-    if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+    if (! USB.IsConnected() //||
+		//! USB.Configure(1) ||
+		//! USB.ClaimAltInterface(1, 1)
+		) {
         
         return;
     }
+	
+	USB.Configure(1);
+	USB.ReleaseInterface(1);
+	USB.ClaimAltInterface(1, 1);
     
     char* buffer = (char*)malloc(kBufferSize);
     
