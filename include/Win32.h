@@ -1,8 +1,19 @@
-/*
- * Win32.h
+/***
+ * iRecovery++ libusb based usb interface for iBoot and iBSS
+ * Copyright (C) 2010  GreySyntax
  *
- *  Created on: Sep 1, 2010
- *      Author: jordan
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef WIN32_H_
@@ -16,25 +27,25 @@
  4.1.  It actually remains the same from 4.1 to 4.2) */
 
 #if !defined( __WINDOWS__ ) && ( defined( _Windows ) || defined( _WINDOWS ) )
-	#define __WINDOWS__
+#define __WINDOWS__
 #endif /* !__WINDOWS__ && ( _Windows || _WINDOWS ) */
 
 #if !defined( __WIN32__ ) && ( defined( WIN32 ) || defined( _WIN32 ) )
-	#ifndef __WINDOWS__
-		#define __WINDOWS__
-	#endif /* __WINDOWS__ */
-	#define __WIN32__
+#ifndef __WINDOWS__
+#define __WINDOWS__
+#endif /* __WINDOWS__ */
+#define __WIN32__
 #endif /* !__WIN32__ && ( WIN32 || _WIN32 ) */
 
 #if defined( __WINDOWS__ ) && !defined( __WIN32__ )
-	#define __WIN16__
+#define __WIN16__
 #endif /* __WINDOWS__ && !__WIN32__ */
 
 /* and now I map it to my version of the above define --tjh */
 #ifdef __WINDOWS__
-	#ifndef WINDOWS
-		#define WINDOWS
-	#endif
+#ifndef WINDOWS
+#define WINDOWS
+#endif
 #endif /* __WINDOWS__ */
 
 

@@ -25,12 +25,11 @@
 #define APPLE_VENDOR_ID 0x05AC
 
 class IDevice {
-
+	
 public:
 	
 	//Constructors
 	IDevice();
-	//~IDevice();
 	
 	//Methods
 	bool AutoBoot();
@@ -44,7 +43,7 @@ public:
 	bool SendBuffer(char* data, int length, int* actual_length);
     void Shell();
 	bool Upload(const char* file);
-
+	
 private:
 	
 	//Properties

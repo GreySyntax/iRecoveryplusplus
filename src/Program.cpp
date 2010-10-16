@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <iostream>
 #include "IDevice.h"
 
@@ -24,12 +24,12 @@ using namespace std;
 static IDevice Device;
 
 int main(int argc, char *argv[]) {
-
+	
 	cout << "iRecovery++  Copyright (C) 2010  GreySyntax\r\n";
 	cout << "This program comes with ABSOLUTELY NO WARRANTY; for details `./iRecovery -w'.\r\n";
 	cout << "This is free software, and you are welcome to redistribute it\r\n";
 	cout << "under certain conditions; type `./iRecovery -o' for details.\r\n" << endl;
-
+	
 	if (Device.Connect()) {
 		
 		Device.Shell();

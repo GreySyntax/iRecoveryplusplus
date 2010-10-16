@@ -54,9 +54,9 @@ bool IDevice::Connect() {
 	if (! USB.Open(APPLE_VENDOR_ID, kRecoveryMode)) {
 		
 		cout << "[IDevice::Connect] Failed to connect to recovery." << endl;
-			
-		if (! USB.Open(APPLE_VENDOR_ID, kWTFMode)) {
 		
+		if (! USB.Open(APPLE_VENDOR_ID, kWTFMode)) {
+			
 			cout << "[IDevice::Connect] Failed to connect to wtf." << endl;
 			
 			if (! USB.Open(APPLE_VENDOR_ID, kDFUMode)) {
@@ -75,7 +75,7 @@ bool IDevice::Connect() {
 	}
 	
 	if (! USB.ClaimInterface(0) || ! USB.ClaimInterface(1)) {
-	
+		
 		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
 		//Disconnect();
 		return false;
@@ -122,7 +122,7 @@ bool IDevice::SendCommand(const char* argv) {
 	int length = strlen(argv);
 	
 	if (length > kCommandMaxLen) {
-	
+		
 		cout << "[IDevice::SendCommand] Command to long, aborting." << endl;
 		return false;
 	}
@@ -132,7 +132,7 @@ bool IDevice::SendCommand(const char* argv) {
 	}
 	
 	if (! USB.Transfer(0x40, 0, 0, 0, argv, (length + 1), kCommandTimeout)) {
-	
+		
 		cout << "[IDevice::SendCommand] Failed to send command." << endl;
 		return false;
 	}
@@ -177,7 +177,7 @@ void IDevice::Shell() {
     char* buffer = (char*)malloc(kBufferSize);
     
     if (buffer == NULL) {
-
+		
         return;
     }
     
@@ -209,30 +209,30 @@ void IDevice::Shell() {
 bool IDevice::Upload(const char* file) {
 	
 	FILE* data = fopen(file, "rb");
-
+	
 	if (data == NULL) {
 		cout << "[IDevice::Upload] Failed to open file " << file << endl;
 		return false;
 	}
 	
 	cout << "[IDevice::Upload] Attemtping to upload file" << endl;
-
+	
 	fseek(data, 0, SEEK_END);
 	unsigned int length = ftell(data);
 	fseek(data, 0, SEEK_SET);
-
+	
 	char* buffer = (char*)malloc(length);
-
+	
 	if (buffer == NULL) {
-
+		
 		cout << "[IDevice::Upload] Failed to allocate " << length << " bytes" << endl;
 		fclose(data);
 		return false;
 	}
-
+	
 	fread(buffer, 1, length, data);
 	fclose(data);
-
+	
 	int actual_length = 0;//((int)length) + 1;
 	
 	return SendBuffer(buffer, length, &actual_length);

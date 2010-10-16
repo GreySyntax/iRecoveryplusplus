@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include "Win32.h"
 #if defined(WINDOWS)
-	/* lets support this at the lowest level! */
-	#include <usb.h>
+/* lets support this at the lowest level! */
+#include <usb.h>
 #else
-	#include <libusb-1.0/libusb.h>
+#include <libusb-1.0/libusb.h>
 #endif
 
 #ifndef LAZYUSB_H_
@@ -31,7 +31,7 @@
 #define LAZYUSB_H_
 
 class LazyUSB {
-
+	
 public:
 	LazyUSB();
 	
@@ -39,23 +39,23 @@ public:
 	bool ClaimAltInterface(int interface, int alt_interface);
 	bool Close();
 	bool Configure(int mode);
-
+	
 	bool Open(int vendorID, int productID);
-
+	
 	bool ReleaseInterface(int interface);
 	void Reset();
-
+	
 	int Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, const char* data, uint16_t length, int timeout);
 	int Write(unsigned char endPoint, char *data, int length, int* actual_length, int timeout);
 	int Read(unsigned char endPoint, char *data, int length, int* actual_length, int timeout);
 	
 	bool IsConnected();
-
-//private:
-	#if defined(WINDOWS)
+	
+private:
+#if defined(WINDOWS)
 	struct usb_device_handle *handle;
-	#else
+#else
 	struct libusb_device_handle *handle;
-	#endif
+#endif
 };
 #endif /* LAZYUSB_H_ */
