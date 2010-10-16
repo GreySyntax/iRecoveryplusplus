@@ -33,13 +33,13 @@ int main(int argc, char *argv[]) {
 	if (Device.Connect()) {
 		
 		/*
-		cout << "AutoBoot: " << endl;
+		 cout << "AutoBoot: " << endl;
 		Device.SendCommand("getenv auto-boot");
 		Device.SendCommand("setenv auto-boot true");
 		Device.SendCommand("saveenv");
 		Device.SendCommand("reboot");
-		*/
-		Device.Upload("../iBEC.n90ap.RELEASE.dfu");
+		 */
+		Device.Shell();
 		Device.Disconnect();
 	}
 	

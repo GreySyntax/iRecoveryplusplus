@@ -49,12 +49,13 @@ bool LazyUSB::ClaimInterface(int interface) {
 		cout << "[LazyUSB::ClaimInterface] Failed to claim usb interface (" << interface << ")." << endl;
 		return false;
 	}
-		
+	
+	cout << "[LazyUSB::ClaimInterface] Claimed interface (" << interface << ")." << endl;
 	return true;
 	
 }
 
-bool LazyUSB::ClaimAltInterface(int interface) {
+bool LazyUSB::ClaimAltInterface(int interface, int alt_interface) {
 	
 	if (handle == NULL) {
 		
@@ -62,17 +63,26 @@ bool LazyUSB::ClaimAltInterface(int interface) {
 		return false;
 	}
 	
+	cout << "[LazyUSB::ClaimAltInterface] Claiming interface (" << interface << ", " << alt_interface << ")." << endl;
 	#if defined(WINDOWS)
+	
 	if (usb_set_altinterface(handle, interface) < 0) {
+		
 		cout << "[LazyUSB::ClaimAltInterface] Failed to claim alt interface (" << interface << ")." << endl;
 		return false;
 	}
 	
-	return true;
 	#else
-	//Not supported directly -- AVOID USING IF POSSIBLE
-	return ClaimInterface(interface);
+	
+	if (libusb_set_interface_alt_setting(handle, interface, alt_interface) < 0) {
+		
+		cout << "[LazyUSB::ClaimAltInterface] Failed to claim alt interface (" << interface << ")." << endl;
+		return false;
+	}
+	
 	#endif
+	
+	return true;
 }
 
 
@@ -102,14 +112,34 @@ bool LazyUSB::Configure(int mode) {
 		return false;
 	}
 	
+
 	#if defined(WINDOWS)
+	
+	//Since we cant easily check the configuration using this old api, lets just do it anyway.
 	if (usb_set_configuration(handle, mode) < 0) {
-	#else
-	if (libusb_set_configuration(handle, mode) < 0) {
-	#endif
+		
 		cout << "[LazyUSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
 		return false;
 	}
+	
+	#else
+	
+	/*int configuration = 0;
+	libusb_get_configuration(handle, &configuration);
+	
+	if (configuration == mode) {
+	
+		cout << "[LazyUSB::Configure] Requested configuration allready set." << endl;
+		return true;
+	}*/
+	
+	if (libusb_set_configuration(handle, mode) < 0) {
+		
+		cout << "[LazyUSB::Configure] Failed to set confiuration (" << mode << ")" << endl;
+		return false;
+	}
+	
+	#endif
 	
 	return true;
 }
@@ -204,7 +234,29 @@ int LazyUSB::Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint
 	return res;
 }
 	
-int LazyUSB::Write(int endPoint, char* data, int length, int* actual_length, int timeout) {
+int LazyUSB::Read(unsigned char endPoint, char* data, int length, int* actual_length, int timeout) {
+	
+	if (handle == NULL) {
+		
+		cout << "[LazyUSB::Read] Device handle not initialized." << endl;
+		return -1;
+	}
+	
+	int res = 0;
+	
+	#if defined(WINDOWS)
+	res = usb_bulk_read(handle, (int*)endPoint, data, length, timeout);
+	#else
+	res = libusb_bulk_transfer(handle, endPoint, (unsigned char*)data, length, actual_length, timeout);
+	#endif
+	
+	cout << "[LazyUSB::Read] Result: #" << res << endl;
+	
+	return res;
+}
+	
+
+int LazyUSB::Write(unsigned char endPoint, char* data, int length, int* actual_length, int timeout) {
 		
 	if (handle == NULL) {
 	
@@ -215,9 +267,9 @@ int LazyUSB::Write(int endPoint, char* data, int length, int* actual_length, int
 	int res = 0;
 	
 	#if defined(WINDOWS)
-	res = usb_bulk_write(handle, endPoint, data, length, timeout);
+	res = usb_bulk_write(handle, (int*)endPoint, data, length, timeout);
 	#else
-	res = libusb_bulk_transfer(handle, (unsigned char)endPoint, (unsigned char*)data, length, actual_length, timeout);
+	res = libusb_bulk_transfer(handle, endPoint, (unsigned char*)data, length, actual_length, timeout);
 	#endif
 	
 	cout << "[LazyUSB::Write] Result: #" << res << endl;

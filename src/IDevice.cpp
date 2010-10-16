@@ -96,11 +96,16 @@ void IDevice::Disconnect() {
 
 bool IDevice::Exploit(const char* file) {
 	
-	if (! USB.IsConnected()) {
+    return false;
+    
+    /*
+     * I was going to add the 3.1.2 usb_control_msg(0x21) exploit here but,
+     * i couldnt really find a reason todo so.
+     */
+    
+    if (! USB.IsConnected()) {
 		Connect();
 	}
-	
-	
 }
 
 void IDevice::Reset() {
@@ -145,13 +150,57 @@ bool IDevice::SendCommand(const char* argv) {
 }
 
 bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
-	
-	if (USB.Write(4, data, length, actual_length, kUploadTimeout) != 0) {
+    
+	if (! USB.IsConnected()) {
+		Connect();
+	}
+    
+	if (USB.Write(0x04, data, length, actual_length, kUploadTimeout) != 0) {
 		
 		return false;
 	}
 	
 	return true;
+}
+
+void IDevice::Shell() {
+    
+	if (! USB.IsConnected()) {
+		Connect();
+	}
+    
+    if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+        
+        return;
+    }
+    
+    char* buffer = (char*)malloc(kBufferSize);
+    
+    if (buffer == NULL) {
+
+        return;
+    }
+    
+    //TODO Log to file
+    
+    bool runShell = true;
+    
+    while (runShell) {
+        
+        int available = 0;
+        
+        memset(buffer, 0, kBufferSize);
+        libusb_bulk_transfer(USB.handle, 0x81, (unsigned char*)buffer, 0x10000, &available, 500);
+       // USB.Read(0x81, buffer, kBufferSize, &available, kCommandTimeout);
+        
+        if (available > 0) {
+            
+            cout << &buffer[available];
+            
+            free(buffer);
+            buffer = (char*)malloc(kBufferSize);
+        }
+    }
 }
 
 bool IDevice::Upload(const char* file) {

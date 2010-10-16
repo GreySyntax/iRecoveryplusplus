@@ -36,7 +36,7 @@ public:
 	LazyUSB();
 	
 	bool ClaimInterface(int interface);
-	bool ClaimAltInterface(int interface);
+	bool ClaimAltInterface(int interface, int alt_interface);
 	bool Close();
 	bool Configure(int mode);
 
@@ -46,11 +46,12 @@ public:
 	void Reset();
 
 	int Transfer(uint8_t requestType, uint8_t request, uint16_t value, uint16_t index, const char* data, uint16_t length, int timeout);
-	int Write(int endPoint, char *data, int length, int* actual_length, int timeout);
+	int Write(unsigned char endPoint, char *data, int length, int* actual_length, int timeout);
+	int Read(unsigned char endPoint, char *data, int length, int* actual_length, int timeout);
 	
 	bool IsConnected();
 
-private:
+//private:
 	#if defined(WINDOWS)
 	struct usb_device_handle *handle;
 	#else

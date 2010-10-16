@@ -42,6 +42,7 @@ public:
 	void Reset();
 	bool SendCommand(const char* argv);
 	bool SendBuffer(char* data, int length, int* actual_length);
+    void Shell();
 	bool Upload(const char* file);
 
 private:

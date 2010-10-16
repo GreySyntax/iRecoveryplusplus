@@ -1,3 +1,5 @@
 === Known Bugs ===
 :make backup is flakey
 :LazyUSB::Write() doesnt work
+:LazyUSB::Read() doesnt work
+:IDevice::Shell() errors with LazyUSB::Read()
