@@ -74,7 +74,7 @@ bool IDevice::Connect() {
 		return false;
 	}
 	
-	if (! USB.ClaimInterface(0) && ! USB.ClaimInterface(1)) {
+	if (! USB.ClaimInterface(0) || ! USB.ClaimInterface(1)) {
 	
 		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
 		//Disconnect();
@@ -169,17 +169,10 @@ void IDevice::Shell() {
 		Connect();
 	}
     
-    if (! USB.IsConnected() //||
-		//! USB.Configure(1) ||
-		//! USB.ClaimAltInterface(1, 1)
-		) {
+    if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
         
         return;
     }
-	
-	USB.Configure(1);
-	USB.ReleaseInterface(1);
-	USB.ClaimAltInterface(1, 1);
     
     char* buffer = (char*)malloc(kBufferSize);
     
@@ -191,19 +184,22 @@ void IDevice::Shell() {
     //TODO Log to file
     
     bool runShell = true;
+	int available = 0, pos = 0;
     
     while (runShell) {
         
-        int available = 0;
+		available = 0;
         
         memset(buffer, 0, kBufferSize);
-        libusb_bulk_transfer(USB.handle, 0x81, (unsigned char*)buffer, 0x10000, &available, 500);
-       // USB.Read(0x81, buffer, kBufferSize, &available, kCommandTimeout);
+        USB.Read(0x81, buffer, kBufferSize, &available, kCommandTimeout);
         
         if (available > 0) {
             
-            cout << &buffer[available];
-            
+			for (pos = 0; pos < available; pos++) {
+				
+				cout << buffer[pos];
+			}
+			
             free(buffer);
             buffer = (char*)malloc(kBufferSize);
         }

@@ -124,14 +124,14 @@ bool LazyUSB::Configure(int mode) {
 	
 	#else
 	
-	/*int configuration = 0;
+	int configuration = 0;
 	libusb_get_configuration(handle, &configuration);
 	
 	if (configuration == mode) {
 	
 		cout << "[LazyUSB::Configure] Requested configuration allready set." << endl;
 		return true;
-	}*/
+	}
 	
 	if (libusb_set_configuration(handle, mode) < 0) {
 		
@@ -168,8 +168,8 @@ bool LazyUSB::Open(int vendorID, int productID) {
 
 	if (handle == NULL) {	
 	#else
+		
 	libusb_init(NULL);
-	libusb_set_debug(NULL, 2);
 		
 	if ((handle = libusb_open_device_with_vid_pid(NULL, vendorID, productID)) == NULL) {
 	#endif
@@ -250,8 +250,6 @@ int LazyUSB::Read(unsigned char endPoint, char* data, int length, int* actual_le
 	res = libusb_bulk_transfer(handle, endPoint, (unsigned char*)data, length, actual_length, timeout);
 	#endif
 	
-	cout << "[LazyUSB::Read] Result: #" << res << endl;
-	
 	return res;
 }
 	
@@ -271,8 +269,6 @@ int LazyUSB::Write(unsigned char endPoint, char* data, int length, int* actual_l
 	#else
 	res = libusb_bulk_transfer(handle, endPoint, (unsigned char*)data, length, actual_length, timeout);
 	#endif
-	
-	cout << "[LazyUSB::Write] Result: #" << res << endl;
 	
 	return res;
 }
