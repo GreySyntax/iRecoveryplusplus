@@ -149,8 +149,9 @@ bool IDevice::SendCommand(const char* argv) {
 		return false;
 	}
 	
-	//add_history(LOG_FILE);
-
+	add_history(argv);
+	write_history(LOG_FILE);
+	
 	char* action = strtok(strdup(argv), " ");
 	
 	if (! strcmp(action, "getenv")) {

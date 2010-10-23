@@ -20,7 +20,6 @@
 
 #include "LazyUSB.h"
 #include "Common.h"
-///#include "Hooks.h"
 
 #define IDEVICE_H_
 #define APPLE_VENDOR_ID		0x05AC
