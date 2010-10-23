@@ -18,8 +18,6 @@
 
 #include "IDevice.h"
 
-#define APPLE_VENDOR_ID 0x05AC
-
 using namespace std;
 
 enum {
@@ -30,8 +28,22 @@ enum {
 	kBufferSize		= 0x10000,
 	kCommandMaxLen	= 0x200,
 	kCommandTimeout = 500,
-	kUploadTimeout	= 1000
+	kUploadTimeout	= 1000,
 };
+
+static char *deftext;
+
+static int set_deftext() {
+	
+	if (deftext) {
+		
+		rl_insert_text(deftext);
+		deftext = (char *) NULL;
+		rl_startup_hook = (rl_hook_func_t *)NULL;
+	}
+	
+	return 0; 
+}
 
 IDevice::IDevice() {
 	
@@ -137,6 +149,8 @@ bool IDevice::SendCommand(const char* argv) {
 		return false;
 	}
 	
+	//add_history(LOG_FILE);
+
 	char* action = strtok(strdup(argv), " ");
 	
 	if (! strcmp(action, "getenv")) {
@@ -155,6 +169,11 @@ bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
 		Connect();
 	}
     
+	if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+		
+		return false;
+	}
+	
 	if (USB.Write(0x04, data, length, actual_length, kUploadTimeout) != 0) {
 		
 		return false;
@@ -185,6 +204,17 @@ void IDevice::Shell() {
     
     bool runShell = true;
 	int available = 0, pos = 0;
+	char *prompt, *temp;
+	
+	deftext = (char *)0;
+	//prompt = "IDevice$: ";
+	
+	if (deftext && *deftext) {
+		
+		rl_startup_hook = set_deftext;
+	}
+	
+	read_history(LOG_FILE);
     
     while (runShell) {
         
@@ -203,6 +233,25 @@ void IDevice::Shell() {
             free(buffer);
             buffer = (char*)malloc(kBufferSize);
         }
+		
+		temp = readline("IDevice$ ");
+		
+		if (temp != 0 && temp && *temp) {
+		
+			//TODO Log
+			
+			if (temp[0] == '/' && strlen(temp) > 1 && temp[1] != ' ') {
+				
+				//TODO Handle command
+				
+			} else {
+				
+				SendCommand(temp);
+			}
+			
+			//Ciao bitch!
+			free(temp);
+		}
     }
 }
 

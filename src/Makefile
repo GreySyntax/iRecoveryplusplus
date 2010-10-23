@@ -1,6 +1,6 @@
 CXXFLAGS =	-O2 -g -Wall -fmessage-length=0 -I./include
 CXXALL =	-lreadline
-CXXCSS =	-I"../include" -I"/usr/local/include" -I"/opt/local/include" -L"/usr/local/lib" -L"/opt/local/lib"
+CXXCSS =	-I"../include" -I"/usr/local/include" -L"/usr/local/lib"
 CXXWIN =	-lusb -I"C:\MinGW\include" -L"C:\MinGW\lib"
 CXXNIX =	-lusb-1.0
 CXXOSX =	-lusb-1.0 -framework CoreFoundation -framework IOKit
@@ -33,7 +33,7 @@ win:	start $(SOURCE)
 	@mkdir ../bin;
 	$(CXX) -o $(TARGET) $(SOURCE) $(CXXALL) $(CXXWIN)
 
-backup:
-	@if [ ! -e ../backup ]; then mkdir ../backup; fi;
+backup: $(SOURCE) $(HEADERS) $(EXTRA_FILES)
+	@if [ ! -e ../backup ]; then; mkdir ../backup; fi;
 	@zip ../backup/`date +%d-%m-%y_%H.%M`.zip $(SOURCE) $(HEADERS) $(EXTRA_FILES)
 

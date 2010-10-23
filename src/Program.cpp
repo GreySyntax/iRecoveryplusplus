@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 	if (Device.Connect()) {
 		
 		Device.Shell();
+		//Device.Upload("../crap");
 		Device.Disconnect();
 	}
 	

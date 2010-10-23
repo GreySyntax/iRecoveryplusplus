@@ -16,40 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDEVICE_H_
-
-#include "LazyUSB.h"
 #include "Common.h"
-///#include "Hooks.h"
+#include "Hooks.h"
 
-#define IDEVICE_H_
-#define APPLE_VENDOR_ID		0x05AC
-#define LOG_FILE			".irecovery_history"
+char *deftext;
 
-class IDevice {
+int set_deftext() {
 	
-public:
+	if (deftext) {
+		
+		rl_insert_text(deftext);
+		deftext = (char *) NULL;
+		rl_startup_hook = (rl_hook_func_t *)NULL;
+	}
 	
-	//Constructors
-	IDevice();
-	
-	//Methods
-	bool AutoBoot();
-	bool Connect();
-	bool Console();
-	void Disconnect();
-	bool Exploit(const char* file);
-	bool IsConnected();
-	void Reset();
-	bool SendCommand(const char* argv);
-	bool SendBuffer(char* data, int length, int* actual_length);
-    void Shell();
-	bool Upload(const char* file);
-	
-private:
-	
-	//Properties
-	LazyUSB USB;
-};
+	return 0; 
+}
 
-#endif /* IDEVICE_H_ */
+void set_deftext(char *txt) {
+	
+	deftext = txt;
+}
