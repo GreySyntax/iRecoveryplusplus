@@ -7,7 +7,7 @@ This program is released under the GPL v3 see the LICENCE file for more details.
 
 === Requirements ===
 :libusb-0.1 (windows) / libusb-1.0 (everything else)
-:libreadline
+:libreadline 6.1 (With latest patches)
 
 == TODO ==
 :File transfer
@@ -17,4 +17,5 @@ This program is released under the GPL v3 see the LICENCE file for more details.
 :Command handlers (getenv)
 :Connect using LazyUSB
 :Disconnect (cleanly)
-
+:Shell
+:Abstraction layer
