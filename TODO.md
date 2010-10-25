@@ -1,4 +1,4 @@
 TODO
 ================================
-*Select product id manually.
-*Implement scripting
+* Select product id manually.
+* Implement scripting
