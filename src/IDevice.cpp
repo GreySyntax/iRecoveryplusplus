@@ -52,11 +52,14 @@ IDevice::IDevice() {
 
 bool IDevice::AutoBoot() {
 	
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		Connect();
 	}
 	
-	if (SendCommand("setenv auto-boot true") && SendCommand("saveenv") && SendCommand("reboot")) {
+	if (SendCommand("setenv auto-boot true") && SendCommand("saveenv")) {
+		
+		//Usually causes errors, lets ignore the status of this one
+		SendCommand("reboot");
 		
 		cout << "[IDevice::AutoBoot] Enabled auto-boot, rebooting device." << endl;
 		return true;
@@ -68,7 +71,7 @@ bool IDevice::AutoBoot() {
 
 bool IDevice::Connect() {
 	
-	if (USB.IsConnected()) {
+	if (IsConnected()) {
 		Disconnect();
 	}
 	
@@ -107,7 +110,7 @@ bool IDevice::Connect() {
 
 void IDevice::Disconnect() {
 	
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		return;
 	}
 	
@@ -124,9 +127,14 @@ bool IDevice::Exploit(const char* file) {
     return false;
 }
 
+bool IDevice::IsConnected() {
+	
+	return USB.IsConnected();
+}
+
 void IDevice::Reset() {
 	
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		Connect();
 	}
 	
@@ -143,7 +151,7 @@ bool IDevice::SendCommand(const char* argv) {
 		return false;
 	}
 	
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		Connect();
 	}
 	
@@ -170,11 +178,11 @@ bool IDevice::SendCommand(const char* argv) {
 
 bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
     
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		Connect();
 	}
     
-	if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+	if (! IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
 		
 		return false;
 	}
@@ -189,11 +197,11 @@ bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
 
 void IDevice::Shell() {
     
-	if (! USB.IsConnected()) {
+	if (! IsConnected()) {
 		Connect();
 	}
     
-    if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+    if (! IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
         
         return;
     }
@@ -244,8 +252,12 @@ void IDevice::Shell() {
 
 			if (temp[0] == '/' && strlen(temp) > 1 && temp[1] != ' ') {
 				
-				//TODO Handle command
-				
+				if (! strcmp(temp, "/exit")) {
+					
+					break;
+				}
+					
+				//TODO Handle commands
 			} else {
 				
 				SendCommand(temp);

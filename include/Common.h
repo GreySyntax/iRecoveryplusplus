@@ -20,6 +20,8 @@
 
 #define COMMON_H_
 
+#define VERSION "2.0.1.1"
+
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
