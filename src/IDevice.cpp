@@ -55,6 +55,15 @@ bool IDevice::AutoBoot() {
 	if (! USB.IsConnected()) {
 		Connect();
 	}
+	
+	if (SendCommand("setenv auto-boot true") && SendCommand("saveenv") && SendCommand("reboot")) {
+		
+		cout << "[IDevice::AutoBoot] Enabled auto-boot, rebooting device." << endl;
+		return true;
+	}
+	
+	cout << "[IDevice::AutoBoot] Failed to enable auto-boot." << endl;
+	return false;
 }
 
 bool IDevice::Connect() {
@@ -89,7 +98,7 @@ bool IDevice::Connect() {
 	if (! USB.ClaimInterface(0) || ! USB.ClaimInterface(1)) {
 		
 		cout << "[IDevice::Connect] Failed to claim interface's." << endl;
-		//Disconnect();
+		Disconnect();
 		return false;
 	}
 	
@@ -107,17 +116,12 @@ void IDevice::Disconnect() {
 }
 
 bool IDevice::Exploit(const char* file) {
-	
-    return false;
-    
+
     /*
      * I was going to add the 3.1.2 usb_control_msg(0x21) exploit here but,
      * i couldnt really find a reason todo so.
-     */
-    
-    if (! USB.IsConnected()) {
-		Connect();
-	}
+     */	
+    return false;
 }
 
 void IDevice::Reset() {
@@ -237,9 +241,7 @@ void IDevice::Shell() {
 		temp = readline("IDevice$ ");
 		
 		if (temp != 0 && temp && *temp) {
-		
-			//TODO Log
-			
+
 			if (temp[0] == '/' && strlen(temp) > 1 && temp[1] != ' ') {
 				
 				//TODO Handle command
@@ -282,7 +284,7 @@ bool IDevice::Upload(const char* file) {
 	fread(buffer, 1, length, data);
 	fclose(data);
 	
-	int actual_length = 0;//((int)length) + 1;
+	int actual_length = 0;
 	
 	return SendBuffer(buffer, length, &actual_length);
 }
