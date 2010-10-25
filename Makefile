@@ -8,7 +8,7 @@ CXXOSX =	-lusb-1.0 -framework CoreFoundation -framework IOKit
 DIRS =		./src ./include
 TARGET =	./bin/iRecovery
 
-EXTRA_FILES = 	./Makefile ./src/Makefile
+EXTRA_FILES = 	./Makefile ./images/irecvpp-black.jpg ./images/irecvpp.png
 SOURCE :=	$(foreach DIR,$(DIRS),$(wildcard $(DIR)/*.cpp))
 HEADERS :=	$(foreach DIR,$(DIRS),$(wildcard $(DIR)/*.h))
 
@@ -34,6 +34,6 @@ win:	start $(SOURCE)
 	$(CXX) -o $(TARGET) $(SOURCE) $(CXXALL) $(CXXWIN)
 
 backup: $(SOURCE) $(HEADERS) $(EXTRA_FILES)
-	@if [ ! -e ./backup ]; then; mkdir ./backup; fi;
+	@if [ ! -e ./backup ]; then mkdir ./backup; fi;
 	@zip ./backup/`date +%d-%m-%y_%H.%M`.zip $(SOURCE) $(HEADERS) $(EXTRA_FILES)
 
