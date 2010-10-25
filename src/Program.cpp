@@ -1,6 +1,6 @@
 /***
  * iRecovery++ libusb based usb interface for iBoot and iBSS
- * Copyright (C) 2010  GreySyntax
+â * Copyright (C) 2010  GreySyntax
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,9 @@ int main(int argc, char *argv[]) {
 	
 	if (Device.Connect()) {
 		
+		//Device.Shell();
+		Device.Upload("iBEC.n90ap.RELEASE.dfu");
 		Device.Shell();
-		//Device.Upload("../crap");
 		Device.Disconnect();
 	}
 	
