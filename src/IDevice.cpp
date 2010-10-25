@@ -128,7 +128,7 @@ bool IDevice::Exploit(const char* file) {
 }
 
 bool IDevice::IsConnected() {
-	
+
 	return USB.IsConnected();
 }
 

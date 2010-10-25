@@ -169,7 +169,7 @@ bool LazyUSB::Open(int vendorID, int productID) {
 	}
 #else		
 	libusb_init(NULL);
-	//libusb_set_debug(NULL, 2);
+	libusb_set_debug(NULL, 2);
 	
 	if ((handle = libusb_open_device_with_vid_pid(NULL, vendorID, productID)) == NULL) {
 		
@@ -274,5 +274,10 @@ int LazyUSB::Write(unsigned char endPoint, char* data, int length, int* actual_l
 		
 bool LazyUSB::IsConnected() {
 	
-	return handle = NULL ? true : false;
+	if (handle == NULL) {
+	
+		return false;
+	}
+	
+	return true;
 }

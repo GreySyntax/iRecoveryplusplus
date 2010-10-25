@@ -20,7 +20,7 @@
 
 #define COMMON_H_
 
-#define VERSION "2.0.1.1"
+#define VERSION "2.0.1.2"
 
 #include <iostream>
 #include <string.h>
