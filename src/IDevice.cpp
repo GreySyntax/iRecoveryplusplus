@@ -170,10 +170,10 @@ bool IDevice::SendBuffer(char* data, int length, int* actual_length) {
 		Connect();
 	}
     
-	/*if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
+	if (! USB.IsConnected() || ! USB.Configure(1) || ! USB.ClaimAltInterface(1, 1)) {
 		
 		return false;
-	}*/
+	}
 	
 	if (USB.Write(0x04, data, length, actual_length, kUploadTimeout) != 0) {
 		
