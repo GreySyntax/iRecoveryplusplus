@@ -1,7 +1,4 @@
-=== TODO ===
-:Select product id manually.
-:Check sending commands works.
-:Finish uploads.
-::Should be easy enough thanks to pod2g.
-:Work on the 'console'
-:Implement scripting
+TODO
+================================
+*Select product id manually.
+*Implement scripting
