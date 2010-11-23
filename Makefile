@@ -1,7 +1,7 @@
 CXXFLAGS =	-O2 -g -Wall -fmessage-length=0 -I./include
 CXXALL =	-lreadline
 CXXCSS =	-I"./include" -I"/usr/local/include" -L"/usr/local/lib"
-CXXWIN =	-lusb -I"C:\MinGW\include" -L"C:\MinGW\lib"
+CXXWIN =	-lusb -I"./include" -I"C:\MinGW\include" -L"C:\MinGW\lib"
 CXXNIX =	-lusb-1.0
 CXXOSX =	-lusb-1.0 -framework CoreFoundation -framework IOKit
 
