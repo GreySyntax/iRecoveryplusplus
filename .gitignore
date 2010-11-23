@@ -1,9 +1,9 @@
-/Debug/.DS_Store
-/Debug/.history
-/Debug/src
+.irecovery_history
 .classpath
 .project
 .settings
 .history
 .cproject
 .DS_Store
+/bin
+/src/*.o
